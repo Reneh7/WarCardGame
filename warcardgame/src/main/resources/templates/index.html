@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>War Card Game</title>
+</head>
+<body>
+<h1>War Card Game</h1>
+
+<button id="createGameButton">Create New Game</button>
+<div id="usernameForm" style="display: none;">
+    <label for="usernameInput">Enter Your Username:</label>
+    <input type="text" id="usernameInput" placeholder="Username">
+    <button id="submitUsernameButton">Create</button>
+</div>
+
+<button id="joinGameButton">Join Game</button>
+<div id="gameIdForm" style="display: none;">
+    <label for="username2Input">Enter Your Username:</label>
+    <input type="text" id="username2Input" placeholder="Username">
+
+    <label for="gameIdInput">Enter The Game Id:</label>
+    <input type="text" id="gameIdInput" placeholder="Id">
+    <button id="submitGameIdButton">Join</button>
+</div>
+
+<button id="instructions">Instructions</button>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/app.js?version=6"></script>
+<script src="/websocket.js"></script>
+</body>
+</html>

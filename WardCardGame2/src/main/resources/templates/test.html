@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>War Card Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1>War Card Game</h1>
+<button onclick="shuffleCards()">Shuffle Cards</button>
+<button onclick="dealCards()">Deal Cards</button>
+
+<div id="result"></div>
+
+<script>
+    var socket = new SockJS('/websocket');
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        if (frame) {
+            stompClient.subscribe('/topic/shuffle/1', function(message) {
+                console.log('inside subscribe');
+                var shuffledCards = JSON.parse(message.body);
+            });
+        } else {
+            console.error('Failed to connect to server');
+        }
+    });
+
+    function shuffleDeck() {
+         stompClient.send('/app/' + '1' + '/shuffle', {}, '');
+    }
+
+</script>
+</body>
+</html>
