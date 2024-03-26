@@ -1,4 +1,3 @@
-
 //=====================================================CREATE NEW GAME AND PLAYER===============================================
 
 function showUsernameForm() {
@@ -15,36 +14,6 @@ function sendMessageCreate(username) {
     stompClient.send("/app/games/create", {}, JSON.stringify(message));
 }
 
-//===========================================REDIRECT TO GAME PAGE=================================================================
-
-function redirectToGameplayPage(gameId) {
-    window.location.href = "/gameplay?gameId=" + gameId;
-}
-
-function redirectJoinedPlayerToGameplayPage(gameId,joinedPlayerSessionId) {
-    var sessionId = getSessionId();
-    if (sessionId === joinedPlayerSessionId) {
-        sendDealtCardsPlayer1Message(gameId);
-        sendDealtCardsPlayer2Message(gameId);
-    }
-    window.location.href = "/gameplay?gameId=" + gameId;
-}
-
-//===========================================DEAL CARDS=================================================================
-
-   function sendDealtCardsPlayer1Message(gameId) {
-          stompClient.send("/app/cards/dealPlayer1", {}, gameId);
-   }
-
-      function sendDealtCardsPlayer2Message(gameId) {
-          stompClient.send("/app/cards/dealPlayer2", {}, gameId);
-   }
-
-//===========================================UPDATE USERNAME UI========================================================
-function updateUI(gameState) {
-    document.getElementById('player1').innerText = gameState.player1Username;
-    document.getElementById('player2').innerText = gameState.player2Username;
-}
 //=================================================JOIN GAME========================================================
 function sendMessageJoin(gameId, username) {
     var sessionId = getSessionId();
@@ -60,6 +29,12 @@ function sendMessageJoin(gameId, username) {
   function showGameIdForm() {
       document.getElementById('gameIdForm').style.display = 'block';
   }
+
+//===========================================REDIRECT TO GAME PAGE=======================================================
+
+function redirectToGameplayPage(gameId) {
+    window.location.href = "/gameplay?gameId=" + gameId;
+}
 
 //==============================================PAGE BUTTONS============================================================
 

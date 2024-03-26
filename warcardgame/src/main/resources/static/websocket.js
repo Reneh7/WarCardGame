@@ -20,41 +20,55 @@ function connectToWebSocket() {
                 redirectToGameplayPage(newGameId);
             }
         });
-
         stompClient.subscribe('/topic/joinGame', function(message) {
             var response = JSON.parse(message.body);
             var newGameId = response.gameId;
             var joinedPlayerSessionId = response.joinedPlayerSessionId;
 
-            redirectJoinedPlayerToGameplayPage(newGameId, joinedPlayerSessionId);
+            redirectToGameplayPage(newGameId);
         });
 
-        stompClient.subscribe('/topic/updateGame', function(message) {
-            var gameState = JSON.parse(message.body);
-            updateUI(gameState);
-        });
+         stompClient.subscribe('/topic/dealCardsPlayer1', function(message) {
+            var response = JSON.parse(message.body);
+            var cards = response.cards;
+            var player1Session = response.playerSession;
+            var sessionId = localStorage.getItem("sessionId");
 
-        stompClient.subscribe('/topic/dealCardsPlayer1', function(message) {
-            var cards = JSON.parse(message.body);
-            var cardsHtml = '';
-            cards.forEach(function(card) {
-                cardsHtml += '<p>' + card.name + ' - ' + card.suit + '</p>';
-            });
-            document.getElementById('player1Cards').innerHTML = cardsHtml;
-        });
+            if(sessionId === player1Session){
+                 displayPlayer1Cards(cards);
+                 handlePlayCardButtonVisibility(player1Session);
+            }
+         });
+         stompClient.subscribe('/topic/dealCardsPlayer2', function(message) {
+            var response = JSON.parse(message.body);
+            var cards = response.cards;
+            var player2Session = response.playerSession;
+            var sessionId = localStorage.getItem("sessionId");
 
-        stompClient.subscribe('/topic/dealCardsPlayer2', function(message) {
-            var cards = JSON.parse(message.body);
-            var cardsHtml = '';
-            cards.forEach(function(card) {
-                cardsHtml += '<p>' + card.name + ' - ' + card.suit + '</p>';
-            });
-            document.getElementById('player2Cards').innerHTML = cardsHtml;
-        });
+            if(sessionId === player2Session){
+                displayPlayer2Cards(cards);
+                handlePlayCardButtonVisibility(player2Session);
+            }
+         });
+
+
+
+         stompClient.subscribe('/topic/playCardPlayer1', function(message) {
+            var card = JSON.parse(message.body);
+            displayPlayer1PlayedCard(card);
+         });
+         stompClient.subscribe('/topic/playCardPlayer2', function(message) {
+            var card = JSON.parse(message.body);
+            displayPlayer2PlayedCard(card);
+         });
+
 
         stompClient.subscribe('/topic/leaveGame', function(message) {
-            var leaveData = JSON.parse(message.body);
-            localStorage.removeItem('sessionId' + leaveData.sessionId); // it does not remove the key value pair
+             var leaveData = JSON.parse(message.body);
+        });
+        stompClient.subscribe('/topic/updateGameAfterLeave', function(message) {
+            var gameState = JSON.parse(message.body);
+            updateUIAfterLeaving(gameState);
         });
     });
 }
@@ -67,7 +81,6 @@ function disconnectWebSocket() {
     }
 }
 
-// Ensure WebSocket connection when DOM content is loaded
 document.addEventListener('DOMContentLoaded', function() {
     connectToWebSocket();
 });

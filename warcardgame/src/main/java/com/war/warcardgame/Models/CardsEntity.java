@@ -20,6 +20,9 @@ public class CardsEntity {
     private String suit;
     @Column(name = "rank")
     private int rank;
+
+    @Column(name = "is_played")
+    private boolean isPlayed;
     @ManyToOne
     @JoinColumn(name = "player_id")
     private PlayersEntity players;

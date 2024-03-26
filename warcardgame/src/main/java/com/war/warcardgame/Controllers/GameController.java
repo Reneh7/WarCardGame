@@ -9,7 +9,6 @@ import com.war.warcardgame.Services.GameService;
 import com.war.warcardgame.Services.PlayerService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +46,18 @@ public class GameController {
 
             model.addAttribute("gameId", gameId);
 
+            // UserName
             model.addAttribute("player1Username", player1 != null ? player1.getUsername() : null);
             model.addAttribute("player2Username", player2 != null ? player2.getUsername() : null);
 
+            // Session
             model.addAttribute("player1Session", player1 != null ? player1.getSessionId() : null);
             model.addAttribute("player2Session", player2 != null ? player2.getSessionId(): null);
 
+
+            // players id
+            model.addAttribute("player1", player1.getPlayerId() != null ? player1.getPlayerId() : null);
+            model.addAttribute("player2", player2 != null ? player2.getPlayerId() : null);
 
             return "gamePlay";
         } else {
@@ -95,9 +100,11 @@ public class GameController {
     @MessageMapping("/games/leave")
     @SendTo("/topic/leaveGame")
     public LeaveGameResponse leaveGame(LeaveGameRequest request){
-        System.out.println("Inside leave game controller");
-
         gameService.leaveGame(request);
+
+        Optional<GameEntity> game = gameRepository.findById(request.getGameId());
+        System.out.println("inside leaveGame game " + game);
+        messagingTemplate.convertAndSend("/topic/updateGameAfterLeave", game);
 
         LeaveGameResponse response = new LeaveGameResponse();
         PlayersEntity player = playerRepository.findPlayerBySessionId(request.getPlayerSession());

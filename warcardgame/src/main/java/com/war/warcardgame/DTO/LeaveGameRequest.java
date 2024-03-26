@@ -6,4 +6,5 @@ import lombok.Data;
 public class LeaveGameRequest {
     private Long gameId;
     private String playerSession;
+    private Long playerId;
 }

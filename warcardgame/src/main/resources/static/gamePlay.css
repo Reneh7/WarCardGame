@@ -1,0 +1,51 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#gameID {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+#startGameButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#leaveGameButton {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#player1 {
+    margin-top: 20px;
+}
+
+#player1Cards {
+    margin-top: 10px;
+}
+
+#player2 {
+    margin-top: 20px;
+}
+
+#player2Cards {
+    margin-top: 10px;
+}

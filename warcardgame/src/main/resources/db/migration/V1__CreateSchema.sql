@@ -9,6 +9,7 @@ CREATE TABLE card_entity (
     name VARCHAR(50) NOT NULL,
     suit VARCHAR(10) NOT NULL,
     rank INT NOT NULL,
+    is_played Boolean NOT NULL,
     player_id BIGINT REFERENCES player_entity(player_id)
 );
 
