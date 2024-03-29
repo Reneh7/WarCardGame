@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CardsRepository extends JpaRepository<CardsEntity,Long> {
-    CardsEntity findByName(String name);
-    List<CardsEntity> findCardsByPlayers_PlayerId(Long playerId);
+    List<CardsEntity> findCardsByPlayers_PlayerIdOrderByDealOrder(Long playerId);
 }

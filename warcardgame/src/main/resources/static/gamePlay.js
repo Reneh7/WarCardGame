@@ -1,61 +1,34 @@
 //===========================================START GAME / DEAL CARDS======================================================
-function sendPlayer1DealCards(gameId){
-    stompClient.send("/app/cards/dealPlayer1", {}, gameId);
+function sendPlayer1DealCardsTest(playerSession){
+    stompClient.send("/app/cards/dealPlayer1Test", {}, playerSession);
 }
 
-function sendPlayer2DealCards(gameId){
-    stompClient.send("/app/cards/dealPlayer2", {}, gameId);
+function sendPlayer2DealCardsTest(playerSession){
+    stompClient.send("/app/cards/dealPlayer2Test", {}, playerSession);
 }
 
-function displayPlayer1Cards(cards) {
+function displayPlayer1CardsTest(cards) {
     const player1CardsContainer = document.getElementById('player1Cards');
     player1CardsContainer.innerHTML = '';
     cards.forEach(card => {
+        console.log("player 1 dealt card: ", card);
         const cardElement = document.createElement('div');
         cardElement.textContent = card.name + ' - ' + card.suit;
         player1CardsContainer.appendChild(cardElement);
     });
 }
 
-function displayPlayer2Cards(cards) {
+function displayPlayer2CardsTest(cards) {
     const player1CardsContainer = document.getElementById('player2Cards');
     player1CardsContainer.innerHTML = '';
     cards.forEach(card => {
+        console.log("player 2 dealt card: ", card);
         const cardElement = document.createElement('div');
         cardElement.textContent = card.name + ' - ' + card.suit;
         player1CardsContainer.appendChild(cardElement);
     });
 }
 
-//===========================================================PLAY CARD=================================================
-
-function sendPlayer1PlayedCardMessage(player1Id) {
-    stompClient.send("/app/cards/playCardPlayer1", {}, player1Id);
-}
-
-function displayPlayer1PlayedCard(card){
-    const player1PlayedCard = document.getElementById('player1PlayedCard');
-    player1PlayedCard.innerHTML = '';
-
-    const cardElement = document.createElement('div');
-    cardElement.textContent = card.name + ' - ' + card.suit;
-
-    player1PlayedCard.appendChild(cardElement);
-}
-
-function sendPlayer2PlayedCardMessage(player2Id) {
-    stompClient.send("/app/cards/playCardPlayer2", {}, player2Id);
-}
-
-function displayPlayer2PlayedCard(card){
-    const player2PlayedCard = document.getElementById('player2PlayedCard');
-    player2PlayedCard.innerHTML = '';
-
-    const cardElement = document.createElement('div');
-    cardElement.textContent = card.name + ' - ' + card.suit;
-
-    player2PlayedCard.appendChild(cardElement);
-}
 
 function handlePlayCardButtonVisibility(sessionId) {
     var player1PlayedCardButton = document.getElementById('playCard1Button');
@@ -70,6 +43,74 @@ function handlePlayCardButtonVisibility(sessionId) {
         player2PlayedCardButton.style.display = 'inline-block';
         player1PlayedCardButton.style.display = 'none';
     }
+}
+//===========================================================PLAY CARD=================================================
+
+function sendPlayer1PlayedCardMessageTest(player1Id) {
+    stompClient.send("/app/cards/playCardPlayer1Test", {}, player1Id);
+}
+
+function displayPlayer1PlayedCardTest(card){
+    const player1PlayedCard = document.getElementById('player1PlayedCard');
+    player1PlayedCard.innerHTML = '';
+
+    const cardContent = card.name + ' - ' + card.suit;
+
+    const cardElement = document.createElement('div');
+    cardElement.textContent = card.name + ' - ' + card.suit;
+
+    player1PlayedCard.appendChild(cardElement);
+}
+
+function sendPlayer2PlayedCardMessageTest(player2Id) {
+    stompClient.send("/app/cards/playCardPlayer2Test", {}, player2Id);
+}
+
+function displayPlayer2PlayedCardTest(card){
+    const player2PlayedCard = document.getElementById('player2PlayedCard');
+    player2PlayedCard.innerHTML = '';
+
+    const cardContent = card.name + ' - ' + card.suit;
+
+    const cardElement = document.createElement('div');
+    cardElement.textContent = card.name + ' - ' + card.suit;
+
+    player2PlayedCard.appendChild(cardElement);
+}
+
+//===========================================================CAPTURE CARDS===============================================
+
+function sendCaptureCardsMessage(player1Id, player2Id){
+    var message = {
+     player1Id : player1Id,
+     player2Id : player2Id
+    };
+    if(message !== null) {
+        stompClient.send("/app/cards/capturedCards", {} , JSON.stringify(message));
+    }
+}
+
+function displayPlayer1CapturedCards(capturedCards){
+    const player1CapturedCards = document.getElementById('player1CapturedCards');
+    player1CapturedCards.innerHTML = '';
+
+    capturedCards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.textContent = card.name + ' - ' + card.suit;
+        player1CapturedCards.appendChild(cardElement);
+    });
+
+}
+
+function displayPlayer2CapturedCards(capturedCards){
+    const player2CapturedCards = document.getElementById('player2CapturedCards');
+    player2CapturedCards.innerHTML = '';
+
+    capturedCards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.textContent = card.name + ' - ' + card.suit;
+        player2CapturedCards.appendChild(cardElement);
+    });
 }
 
 
@@ -106,9 +147,11 @@ document.addEventListener('DOMContentLoaded', function() {
        startGameButton.addEventListener('click', function(event) {
            event.preventDefault();
            var gameId = document.getElementById('gameID').textContent.trim();
+           var player1Session = document.getElementById('player1Session').innerText;
+           var player2Session = document.getElementById('player2Session').innerText;
+           sendPlayer1DealCardsTest(player1Session);
+           sendPlayer2DealCardsTest(player2Session);
 
-           sendPlayer1DealCards(gameId);
-           sendPlayer2DealCards(gameId);
        });
    }
 
@@ -117,20 +160,21 @@ document.addEventListener('DOMContentLoaded', function() {
    if (player1PlayedCardButton) {
        player1PlayedCardButton.addEventListener('click', function(event) {
            event.preventDefault();
+
            var player1Id = document.getElementById('player1Id').textContent.trim();
-           sendPlayer1PlayedCardMessage(player1Id);
+           sendPlayer1PlayedCardMessageTest(player1Id);
        });
    }
 
     // Player 2 play Card button
-      var player2PlayedCardButton = document.getElementById('playCard2Button');
-      if (player2PlayedCardButton) {
-          player2PlayedCardButton.addEventListener('click', function(event) {
-              event.preventDefault();
-              var player2Id = document.getElementById('player2Id').textContent.trim();
-              sendPlayer2PlayedCardMessage(player2Id);
-          });
-      }
+     var player2PlayedCardButton = document.getElementById('playCard2Button');
+     if (player2PlayedCardButton) {
+         player2PlayedCardButton.addEventListener('click', function(event) {
+             event.preventDefault();
+             var player2Id = document.getElementById('player2Id').textContent.trim();
+             sendPlayer2PlayedCardMessageTest(player2Id);
+         });
+     }
 
    // leave game button
    var leaveGameButton = document.getElementById('leaveGameButton');

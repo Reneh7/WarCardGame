@@ -23,6 +23,8 @@ public class CardsEntity {
 
     @Column(name = "is_played")
     private boolean isPlayed;
+    @Column(name = "deal_order")
+    private int dealOrder;
     @ManyToOne
     @JoinColumn(name = "player_id")
     private PlayersEntity players;

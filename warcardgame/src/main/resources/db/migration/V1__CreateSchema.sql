@@ -10,6 +10,7 @@ CREATE TABLE card_entity (
     suit VARCHAR(10) NOT NULL,
     rank INT NOT NULL,
     is_played Boolean NOT NULL,
+    deal_order INT NOT NULL,
     player_id BIGINT REFERENCES player_entity(player_id)
 );
 

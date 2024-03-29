@@ -108,7 +108,7 @@ public class GameController {
 
         LeaveGameResponse response = new LeaveGameResponse();
         PlayersEntity player = playerRepository.findPlayerBySessionId(request.getPlayerSession());
-        response.setMessage("Player " + player.getUsername() + " has left the game");
+        response.setMessage("Player has left the game");
 
         return response;
     }

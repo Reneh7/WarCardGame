@@ -1,4 +1,6 @@
 var stompClient = null;
+var player1TurnInfo = null;
+var player2TurnInfo = null;
 
 function connectToWebSocket() {
     if (stompClient !== null) {
@@ -28,39 +30,62 @@ function connectToWebSocket() {
             redirectToGameplayPage(newGameId);
         });
 
-         stompClient.subscribe('/topic/dealCardsPlayer1', function(message) {
+        stompClient.subscribe('/topic/dealCardsPlayer1Test', function(message) {
             var response = JSON.parse(message.body);
             var cards = response.cards;
             var player1Session = response.playerSession;
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player1Session){
-                 displayPlayer1Cards(cards);
-                 handlePlayCardButtonVisibility(player1Session);
+                displayPlayer1CardsTest(cards);
+                handlePlayCardButtonVisibility(player1Session);
             }
-         });
-         stompClient.subscribe('/topic/dealCardsPlayer2', function(message) {
+        });
+        stompClient.subscribe('/topic/dealCardsPlayer2Test', function(message) {
             var response = JSON.parse(message.body);
             var cards = response.cards;
             var player2Session = response.playerSession;
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player2Session){
-                displayPlayer2Cards(cards);
+                displayPlayer2CardsTest(cards);
                 handlePlayCardButtonVisibility(player2Session);
             }
-         });
+        });
 
 
 
-         stompClient.subscribe('/topic/playCardPlayer1', function(message) {
-            var card = JSON.parse(message.body);
-            displayPlayer1PlayedCard(card);
-         });
-         stompClient.subscribe('/topic/playCardPlayer2', function(message) {
-            var card = JSON.parse(message.body);
-            displayPlayer2PlayedCard(card);
-         });
+
+        stompClient.subscribe('/topic/playCardPlayer1Test', function(message) {
+            var response = JSON.parse(message.body);
+            var card = response.card;
+            var turn = response.turn;
+            console.log("player 1 turn: ", turn);
+            var playerSession = response.playerSession;
+            var currentSession = localStorage.getItem("sessionId");
+
+            if (turn === true) {
+                displayPlayer1PlayedCardTest(card);
+            } else if (turn === false && playerSession === currentSession ) {
+                alert("It's not your turn!");
+            }
+        });
+        stompClient.subscribe('/topic/playCardPlayer2Test', function(message) {
+             var response = JSON.parse(message.body);
+             var card = response.card;
+             var turn = response.turn;
+             console.log("player 2 turn: ", turn);
+             var playerSession = response.playerSession;
+             var currentSession = localStorage.getItem("sessionId");
+
+            if (turn === true){
+                displayPlayer2PlayedCardTest(card);
+            } else if (turn === false && playerSession === currentSession ){
+                alert("It's not your turn!");
+            }
+        });
+
+
 
 
         stompClient.subscribe('/topic/leaveGame', function(message) {

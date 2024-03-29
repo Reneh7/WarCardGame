@@ -20,4 +20,5 @@ public class PlayersEntity {
     private String username;
     @Column(name = "session_id")
     private String sessionId;
+
 }

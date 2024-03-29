@@ -10,6 +10,7 @@ import com.war.warcardgame.Repositories.GameRepository;
 import com.war.warcardgame.Repositories.PlayerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +20,13 @@ public class GameService {
     private PlayerRepository playerRepository;
     private GameState gameState;
     private CardsRepository cardsRepository;
+    private CardsService2 cardsService2;
 
-    public GameService(GameRepository gameRepository,PlayerRepository playerRepository,CardsRepository cardsRepository) {
+    public GameService(GameRepository gameRepository,PlayerRepository playerRepository,CardsRepository cardsRepository,CardsService2 cardsService2) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
         this.cardsRepository = cardsRepository;
+        this.cardsService2 = cardsService2;
     }
 
     public GameEntity createNewGame(PlayersEntity player1){
@@ -47,15 +50,13 @@ public class GameService {
         return null;
     }
 
-
     public void leaveGame(LeaveGameRequest request){
         Long gameId = request.getGameId();
         String sessionId = request.getPlayerSession();
-        Long playerId = request.getPlayerId();
 
         Optional<GameEntity> optionalGame = gameRepository.findById(gameId);
+
         PlayersEntity player = playerRepository.findPlayerBySessionId(sessionId);
-        List<CardsEntity> cards = cardsRepository.findCardsByPlayers_PlayerId(playerId);
 
         if (optionalGame.isPresent() && player != null) {
             GameEntity game = optionalGame.get();
@@ -63,23 +64,49 @@ public class GameService {
             if (player.equals(game.getPlayer1())) {
                 game.setPlayer1(null);
                 game.setWinner(game.getPlayer2());
-
+                reDealCards(game, game.getPlayer1(), game.getPlayer2());
             } else if (player.equals(game.getPlayer2())) {
                 game.setPlayer2(null);
                 game.setWinner(game.getPlayer1());
+                reDealCards(game, game.getPlayer1(), game.getPlayer2());
             }
+
             if (game.getPlayer1() == null || game.getPlayer2() == null) {
                 game.setGameState(GameState.GAME_ENDED);
             }
 
-            for (CardsEntity card : cards) {
-                card.setPlayers(null);
-                card.setPlayed(false);
-            }
-
             gameRepository.save(game);
-            cardsRepository.saveAll(cards);
             playerRepository.delete(player);
+            cardsService2.resetTurn();
         }
     }
+
+    private void reDealCards(GameEntity game, PlayersEntity player1, PlayersEntity player2) {
+        List<CardsEntity> allCards = cardsRepository.findAll();
+
+        for (CardsEntity card : allCards) {
+            card.setPlayers(null);
+            card.setPlayed(false);
+        }
+
+        Collections.shuffle(allCards);
+
+        List<CardsEntity> player1Cards = allCards.subList(0, allCards.size() / 2);
+        List<CardsEntity> player2Cards = allCards.subList(allCards.size() / 2, allCards.size());
+
+        dealCards(player1, player1Cards);
+        dealCards(player2, player2Cards);
+    }
+
+    private void dealCards(PlayersEntity player, List<CardsEntity> cards) {
+        for (int i = 0; i < cards.size(); i++) {
+            CardsEntity card = cards.get(i);
+            card.setDealOrder(i);
+            card.setPlayers(player);
+            cardsRepository.save(card);
+        }
+    }
+
+
+
 }
