@@ -136,9 +136,7 @@ public class CardsService {
                     playCardResponse.setTurn(player2Turn);
                     playCardResponse.setPlayerSession(player2.getSessionId());
 
-                    System.out.println("card in play2 in playCard2: " + card );
                     playedCard2 = card;
-                    System.out.println("playedCard2 in playCard2: " + playedCard2 );
 
                     gameRound(player1Id,player2Id);
 
@@ -167,11 +165,7 @@ public class CardsService {
     public CapturedCardsResponse gameRound(long player1Id, long player2Id) {
         CapturedCardsResponse capturedCardsResponse = new CapturedCardsResponse();
 
-        System.out.println("playedCard1 in gameRound:" + playedCard1);
-        System.out.println("playedCard2 in gameRound:" + playedCard2);
-        System.out.println("player1Turn in gameRound:" + player1Turn);
-        System.out.println("player2Turn in gameRound:" + player2Turn);
-
+        System.out.println("before if in gameRound");
         if (playedCard1.getRank() > playedCard2.getRank()) {
                 player1CapturedCards.add(playedCard1);
                 player1CapturedCards.add(playedCard2);
@@ -187,49 +181,57 @@ public class CardsService {
 
                 messagingTemplate.convertAndSend("/topic/capturedCards/player2", capturedCardsResponse.getPlayer2CapturedCards());
         } else {
-                PlayCard2Request playCard2Request = new PlayCard2Request();
-                playCard2Request.setPlayer1Id(player1Id);
-                playCard2Request.setPlayer2Id(player2Id);
+            List<CardsEntity> warCards = new ArrayList<>();
+            warCards.add(playedCard1);
+            warCards.add(playedCard2);
 
-                war(playCard2Request);
+            // Add additional cards for the war
+            for (int i = 0; i < 3; i++) {
+                CardsEntity additionalCard1 = drawNextCard(player1Id);
+                if (additionalCard1 != null) {
+                    warCards.add(additionalCard1);
+                }
+                CardsEntity additionalCard2 = drawNextCard(player2Id);
+                if (additionalCard2 != null) {
+                    warCards.add(additionalCard2);
+                }
+            }
+
+            CardsEntity lastCard1 = warCards.get(warCards.size() - 2);
+            CardsEntity lastCard2 = warCards.get(warCards.size() - 1);
+
+            if (lastCard1.getRank() > lastCard2.getRank()) {
+                player1CapturedCards.addAll(warCards);
+                capturedCardsResponse.setPlayer1CapturedCards(player1CapturedCards);
+                messagingTemplate.convertAndSend("/topic/capturedCards/player1", capturedCardsResponse.getPlayer1CapturedCards());
+            } else if (lastCard1.getRank() < lastCard2.getRank()) {
+                player2CapturedCards.addAll(warCards);
+                capturedCardsResponse.setPlayer2CapturedCards(player2CapturedCards);
+                messagingTemplate.convertAndSend("/topic/capturedCards/player2", capturedCardsResponse.getPlayer2CapturedCards());
+            } else {
+                gameRound(player1Id, player2Id);
+            }
         }
-        System.out.println("outside if in capture");
+
         return capturedCardsResponse;
     }
 
-
-    public List<CardsEntity> war(PlayCard2Request playCard2Request){
-       long player1Id = playCard2Request.getPlayer1Id();
-       long player2Id = playCard2Request.getPlayer2Id();
-
-       PlayCardResponse player1Response = new PlayCardResponse();
-       PlayCardResponse player2Response = new PlayCardResponse();
-       int i = 0;
-
-       while (i < 4){
-           player1Response = playCard1(player1Id);
-           player2Response = playCard2(playCard2Request);
-           i++;
-       }
-
-       CardsEntity player1Card =  player1Response.getCard();
-       CardsEntity player2Card =  player2Response.getCard();
-       if (player1Card.getRank() > player2Card.getRank()){
-           player1CapturedCards.add(playedCard1);
-           player1CapturedCards.add(playedCard2);
-       } else if(player1Card.getRank() < player2Card.getRank()){
-           player2CapturedCards.add(playedCard1);
-           player2CapturedCards.add(playedCard2);
-       } else {
-           war(playCard2Request);
-       }
-       return null;
-   }
+    private CardsEntity drawNextCard(long playerId) {
+        List<CardsEntity> playerCards = cardsRepository.findCardsByPlayers_PlayerIdOrderByDealOrder(playerId);
+        for (CardsEntity card : playerCards) {
+            if (!card.isPlayed()) {
+                card.setPlayed(true);
+                cardsRepository.save(card);
+                return card;
+            }
+        }
+        return null;
+    }
+    
 
     public void resetCapturedCards(){
         player1CapturedCards = new ArrayList<>();
         player2CapturedCards = new ArrayList<>();
     }
-
 
 }

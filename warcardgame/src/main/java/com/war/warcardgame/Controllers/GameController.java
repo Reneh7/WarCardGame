@@ -103,7 +103,6 @@ public class GameController {
         gameService.leaveGame(request);
 
         Optional<GameEntity> game = gameRepository.findById(request.getGameId());
-        System.out.println("inside leaveGame game " + game);
         messagingTemplate.convertAndSend("/topic/updateGameAfterLeave", game);
 
         LeaveGameResponse response = new LeaveGameResponse();

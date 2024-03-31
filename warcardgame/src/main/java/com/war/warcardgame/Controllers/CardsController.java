@@ -1,6 +1,5 @@
 package com.war.warcardgame.Controllers;
 
-import com.war.warcardgame.DTO.CapturedCardsResponse;
 import com.war.warcardgame.DTO.DealCardsResponse;
 import com.war.warcardgame.DTO.PlayCard2Request;
 import com.war.warcardgame.DTO.PlayCardResponse;
