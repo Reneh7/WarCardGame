@@ -62,8 +62,14 @@ function displayPlayer1PlayedCardTest(card){
     player1PlayedCard.appendChild(cardElement);
 }
 
-function sendPlayer2PlayedCardMessageTest(player2Id) {
-    stompClient.send("/app/cards/playCardPlayer2Test", {}, player2Id);
+
+function sendPlayer2PlayedCardMessageTest(player1Id,player2Id) {
+    var message = {
+          player1Id : player1Id,
+          player2Id : player2Id
+    };
+
+    stompClient.send("/app/cards/playCardPlayer2Test", {}, JSON.stringify(message));
 }
 
 function displayPlayer2PlayedCardTest(card){
@@ -78,17 +84,7 @@ function displayPlayer2PlayedCardTest(card){
     player2PlayedCard.appendChild(cardElement);
 }
 
-//===========================================================CAPTURE CARDS===============================================
-
-function sendCaptureCardsMessage(player1Id, player2Id){
-    var message = {
-     player1Id : player1Id,
-     player2Id : player2Id
-    };
-    if(message !== null) {
-        stompClient.send("/app/cards/capturedCards", {} , JSON.stringify(message));
-    }
-}
+//===========================================================DISPLAY CAPTURE CARDS===============================================
 
 function displayPlayer1CapturedCards(capturedCards){
     const player1CapturedCards = document.getElementById('player1CapturedCards');
@@ -171,8 +167,11 @@ document.addEventListener('DOMContentLoaded', function() {
      if (player2PlayedCardButton) {
          player2PlayedCardButton.addEventListener('click', function(event) {
              event.preventDefault();
+
+             var player1Id = document.getElementById('player1Id').textContent.trim();
              var player2Id = document.getElementById('player2Id').textContent.trim();
-             sendPlayer2PlayedCardMessageTest(player2Id);
+
+             sendPlayer2PlayedCardMessageTest(player1Id,player2Id);
          });
      }
 

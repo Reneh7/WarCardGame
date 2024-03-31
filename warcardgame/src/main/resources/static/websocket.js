@@ -1,6 +1,4 @@
 var stompClient = null;
-var player1TurnInfo = null;
-var player2TurnInfo = null;
 
 function connectToWebSocket() {
     if (stompClient !== null) {
@@ -29,6 +27,9 @@ function connectToWebSocket() {
 
             redirectToGameplayPage(newGameId);
         });
+
+
+
 
         stompClient.subscribe('/topic/dealCardsPlayer1Test', function(message) {
             var response = JSON.parse(message.body);
@@ -60,7 +61,6 @@ function connectToWebSocket() {
             var response = JSON.parse(message.body);
             var card = response.card;
             var turn = response.turn;
-            console.log("player 1 turn: ", turn);
             var playerSession = response.playerSession;
             var currentSession = localStorage.getItem("sessionId");
 
@@ -74,7 +74,6 @@ function connectToWebSocket() {
              var response = JSON.parse(message.body);
              var card = response.card;
              var turn = response.turn;
-             console.log("player 2 turn: ", turn);
              var playerSession = response.playerSession;
              var currentSession = localStorage.getItem("sessionId");
 
@@ -84,6 +83,18 @@ function connectToWebSocket() {
                 alert("It's not your turn!");
             }
         });
+
+
+
+
+         stompClient.subscribe('/topic/capturedCards/player1', function(message) {
+             var capturedCards = JSON.parse(message.body);
+             displayPlayer1CapturedCards(capturedCards);
+         });
+         stompClient.subscribe('/topic/capturedCards/player2', function(message) {
+             var capturedCards = JSON.parse(message.body);
+             displayPlayer2CapturedCards(capturedCards);
+         });
 
 
 

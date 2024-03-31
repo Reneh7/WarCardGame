@@ -20,13 +20,14 @@ public class GameService {
     private PlayerRepository playerRepository;
     private GameState gameState;
     private CardsRepository cardsRepository;
-    private CardsService2 cardsService2;
+    // CHANGE THIS AFTER TESTING
+    private CardsService cardsService;
 
-    public GameService(GameRepository gameRepository,PlayerRepository playerRepository,CardsRepository cardsRepository,CardsService2 cardsService2) {
+    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, CardsRepository cardsRepository, CardsService cardsService) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
         this.cardsRepository = cardsRepository;
-        this.cardsService2 = cardsService2;
+        this.cardsService = cardsService;
     }
 
     public GameEntity createNewGame(PlayersEntity player1){
@@ -77,7 +78,8 @@ public class GameService {
 
             gameRepository.save(game);
             playerRepository.delete(player);
-            cardsService2.resetTurn();
+            cardsService.resetTurn();
+            cardsService.resetCapturedCards();
         }
     }
 
