@@ -11,7 +11,6 @@ function displayPlayer1CardsTest(cards) {
     const player1CardsContainer = document.getElementById('player1Cards');
     player1CardsContainer.innerHTML = '';
     cards.forEach(card => {
-        console.log("player 1 dealt card: ", card);
         const cardElement = document.createElement('div');
         cardElement.textContent = card.name + ' - ' + card.suit;
         player1CardsContainer.appendChild(cardElement);
@@ -22,7 +21,6 @@ function displayPlayer2CardsTest(cards) {
     const player1CardsContainer = document.getElementById('player2Cards');
     player1CardsContainer.innerHTML = '';
     cards.forEach(card => {
-        console.log("player 2 dealt card: ", card);
         const cardElement = document.createElement('div');
         cardElement.textContent = card.name + ' - ' + card.suit;
         player1CardsContainer.appendChild(cardElement);
@@ -63,10 +61,11 @@ function displayPlayer1PlayedCardTest(card){
 }
 
 
-function sendPlayer2PlayedCardMessageTest(player1Id,player2Id) {
+function sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId) {
     var message = {
           player1Id : player1Id,
-          player2Id : player2Id
+          player2Id : player2Id,
+          gameId : gameId
     };
 
     stompClient.send("/app/cards/playCardPlayer2Test", {}, JSON.stringify(message));
@@ -87,6 +86,7 @@ function displayPlayer2PlayedCardTest(card){
 //===========================================================DISPLAY CAPTURE CARDS===============================================
 
 function displayPlayer1CapturedCards(capturedCards){
+console.log("Inside displayPlayer1CapturedCards");
     const player1CapturedCards = document.getElementById('player1CapturedCards');
     player1CapturedCards.innerHTML = '';
 
@@ -99,6 +99,7 @@ function displayPlayer1CapturedCards(capturedCards){
 }
 
 function displayPlayer2CapturedCards(capturedCards){
+console.log("Inside displayPlayer2CapturedCards");
     const player2CapturedCards = document.getElementById('player2CapturedCards');
     player2CapturedCards.innerHTML = '';
 
@@ -107,6 +108,34 @@ function displayPlayer2CapturedCards(capturedCards){
         cardElement.textContent = card.name + ' - ' + card.suit;
         player2CapturedCards.appendChild(cardElement);
     });
+}
+
+//===========================================================DEAL CAPTURED CARDS=================================================
+function dealCapturedCards1(cards) {
+    const player1CardsContainer = document.getElementById('player1Cards');
+    player1CardsContainer.innerHTML = '';
+    cards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.textContent = card.name + ' - ' + card.suit;
+        player1CardsContainer.appendChild(cardElement);
+    });
+}
+
+function dealCapturedCards2(cards) {
+    const player1CardsContainer = document.getElementById('player2Cards');
+    player1CardsContainer.innerHTML = '';
+    cards.forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.textContent = card.name + ' - ' + card.suit;
+        player1CardsContainer.appendChild(cardElement);
+    });
+}
+
+//===========================================================WINNER MESSAGE=================================================
+
+function displayWinner(winner){
+     const winnerContainer = document.getElementById('winner');
+     winnerContainer.textContent = "The winner is: " + winner;
 }
 
 
@@ -157,8 +186,8 @@ document.addEventListener('DOMContentLoaded', function() {
        player1PlayedCardButton.addEventListener('click', function(event) {
            event.preventDefault();
 
-           var player1Id = document.getElementById('player1Id').textContent.trim();
-           sendPlayer1PlayedCardMessageTest(player1Id);
+         var player1Id = document.getElementById('player1Id').textContent.trim();
+         sendPlayer1PlayedCardMessageTest(player1Id);
        });
    }
 
@@ -170,8 +199,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
              var player1Id = document.getElementById('player1Id').textContent.trim();
              var player2Id = document.getElementById('player2Id').textContent.trim();
+             var gameId = document.getElementById('gameID').textContent.trim();
 
-             sendPlayer2PlayedCardMessageTest(player1Id,player2Id);
+             sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId);
          });
      }
 

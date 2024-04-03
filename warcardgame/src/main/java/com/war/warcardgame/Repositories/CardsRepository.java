@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface CardsRepository extends JpaRepository<CardsEntity,Long> {
     List<CardsEntity> findCardsByPlayers_PlayerIdOrderByDealOrder(Long playerId);
+    List<CardsEntity> findCardsByPlayers_PlayerId(long player1Id);
 }

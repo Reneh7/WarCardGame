@@ -40,22 +40,28 @@ function redirectToGameplayPage(gameId) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+    var usernameForm = document.getElementById('usernameForm');
+    var gameIdForm = document.getElementById('gameIdForm');
+    var closeBtns = document.querySelectorAll('.close');
+
+    function openModal(modal) {
+        modal.style.display = 'block';
+    }
+
+    // Function to close the modal
+    function closeModal(modal) {
+        modal.style.display = 'none';
+    }
+
     // Create game button
     var createGameButton = document.getElementById('createGameButton');
     if (createGameButton) {
         createGameButton.addEventListener('click', function(event) {
             event.preventDefault();
-            showUsernameForm();
-        });
-    }
 
-    // Submit username button
-    var submitUsernameButton = document.getElementById('submitUsernameButton');
-    if (submitUsernameButton) {
-        submitUsernameButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            var username = document.getElementById('usernameInput').value;
-            sendMessageCreate(username);
+            openModal(usernameModal);
+            showUsernameForm();
+
         });
     }
 
@@ -64,9 +70,47 @@ document.addEventListener('DOMContentLoaded', function() {
     if (joinGameButton) {
         joinGameButton.addEventListener('click', function(event) {
             event.preventDefault();
+            openModal(gameIdModal);
             showGameIdForm();
         });
     }
+
+    // Rules button
+    var rulesButton = document.getElementById('instructions');
+    if (rulesButton) {
+        rulesButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            openModal(instructionsIdModal);
+        });
+    }
+
+    // Close modal when clicking on the close button
+    closeBtns.forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            var modal = btn.closest('.modal');
+            closeModal(modal);
+        });
+    });
+
+    // Close modal when clicking outside the modal
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            closeModal(event.target);
+        }
+    };
+
+    // Submit username button
+    var submitUsernameButton = document.getElementById('submitUsernameButton');
+    if (submitUsernameButton) {
+        submitUsernameButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('usernameInput').value;
+            sendMessageCreate(username);
+            closeModal(usernameModal);
+        });
+    }
+
 
     // Submit game ID button
     var submitGameIdButton = document.getElementById('submitGameIdButton');
@@ -77,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var gameId = parseInt(gameIdString);
             var username = document.getElementById('username2Input').value;
             sendMessageJoin(gameId, username);
+            closeModal(gameIdModal);
         });
     }
 });

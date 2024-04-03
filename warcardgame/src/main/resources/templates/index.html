@@ -4,28 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>War Card Game</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
 <h1>War Card Game</h1>
 
-<button id="createGameButton">Create New Game</button>
-<div id="usernameForm" style="display: none;">
-    <label for="usernameInput">Enter Your Username:</label>
-    <input type="text" id="usernameInput" placeholder="Username">
-    <button id="submitUsernameButton">Create</button>
+<div class="container">
+        <button id="createGameButton">New Game</button>
+
+    <div id="usernameModal" class="modal">
+        <div id="usernameModal-content" class="modal-content">
+            <span class="close">&times;</span>
+            <div id="usernameForm" class="modal-form" style="display: none;">
+                <label for="usernameInput">Enter Your Username:</label>
+                <input type="text" id="usernameInput" placeholder="Username" required>
+                <button id="submitUsernameButton">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="joinGameButton">Join Game</button>
+
+    <div id="gameIdModal" class="modal">
+        <div id="gameIdModal-content" class="modal-content">
+            <span class="close">&times;</span>
+            <div id="gameIdForm"  class="modal-form"  style="display: none;">
+                <h2>Join Game</h2>
+                <label for="username2Input">Enter Your Username:</label>
+                <input type="text" id="username2Input" name="username2Input" placeholder="Enter Username" required>
+
+                <label for="gameIdInput">Enter The Game Id:</label>
+                <input type="text" id="gameIdInput" name="gameIdInput" placeholder="Enter Game ID" required>
+
+                <button id="submitGameIdButton">Join</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="instructions">Game Rules</button>
+    <div id="instructionsIdModal" class="modal">
+        <div id="instructionsIdModal-content" class="modal-content">
+            <span class="close">&times;</span>
+            <div id="instructionsIdForm"  class="modal-form">
+                <h2>Rules</h2>
+                <p> War is a simple card game typically played by two players. The deck is divided evenly between the players, and each player places their stack of cards face down. During each round, both players reveal the top card of their stack simultaneously. The player with the higher-ranked card wins the round and collects both cards, placing them to the side. If the cards are of equal rank, a "war" occurs: each player places two face-down cards on top of their revealed card and then reveals a third card. The player with the higher-ranked third card wins all the cards in the "war." The game continues until they go through all of their cards and the winner is the player who captured more cards. </p>
+            </div>
+        </div>
+    </div>
+
 </div>
-
-<button id="joinGameButton">Join Game</button>
-<div id="gameIdForm" style="display: none;">
-    <label for="username2Input">Enter Your Username:</label>
-    <input type="text" id="username2Input" placeholder="Username">
-
-    <label for="gameIdInput">Enter The Game Id:</label>
-    <input type="text" id="gameIdInput" placeholder="Id">
-    <button id="submitGameIdButton">Join</button>
-</div>
-
-<button id="instructions">Instructions</button>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>

@@ -11,6 +11,8 @@ function connectToWebSocket() {
     stompClient.connect({}, function(frame) {
         console.log("Connected:", frame);
 
+
+        // CREATE/JOIN
         stompClient.subscribe('/topic/createGame', function(message) {
             var body = JSON.parse(message.body);
             var newGameId = body.gameId;
@@ -30,7 +32,7 @@ function connectToWebSocket() {
 
 
 
-
+        // DEALING CARDS
         stompClient.subscribe('/topic/dealCardsPlayer1Test', function(message) {
             var response = JSON.parse(message.body);
             var cards = response.cards;
@@ -38,7 +40,7 @@ function connectToWebSocket() {
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player1Session){
-                displayPlayer1CardsTest(cards);
+//                displayPlayer1CardsTest(cards);
                 handlePlayCardButtonVisibility(player1Session);
             }
         });
@@ -49,14 +51,14 @@ function connectToWebSocket() {
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player2Session){
-                displayPlayer2CardsTest(cards);
+//                displayPlayer2CardsTest(cards);
                 handlePlayCardButtonVisibility(player2Session);
             }
         });
 
 
 
-
+        //PLAYING THE DEALT CARDS
         stompClient.subscribe('/topic/playCardPlayer1Test', function(message) {
             var response = JSON.parse(message.body);
             var card = response.card;
@@ -86,7 +88,7 @@ function connectToWebSocket() {
 
 
 
-
+         // CAPTURING CARDS
          stompClient.subscribe('/topic/capturedCards/player1', function(message) {
              var capturedCards = JSON.parse(message.body);
              displayPlayer1CapturedCards(capturedCards);
@@ -99,6 +101,39 @@ function connectToWebSocket() {
 
 
 
+         // DEALING CAPTURED CARDS
+         stompClient.subscribe('/topic/dealCapturedCards1', function(message) {
+             var response = JSON.parse(message.body);
+             var cards = response.cards;
+             var player1Session = response.playerSession;
+             var sessionId = localStorage.getItem("sessionId");
+
+             if(sessionId === player1Session){
+                dealCapturedCards1(cards);
+             }
+
+         });
+         stompClient.subscribe('/topic/dealCapturedCards2', function(message) {
+             var response = JSON.parse(message.body);
+             var cards = response.cards;
+             var player2Session = response.playerSession;
+             var sessionId = localStorage.getItem("sessionId");
+
+             if(sessionId === player2Session){
+                dealCapturedCards2(cards);
+             }
+         });
+
+
+
+        // DISPLAY WINNER
+        stompClient.subscribe('/topic/game/winner', function(message) {
+             var winner =  message.body;
+             displayWinner(winner);
+        });
+
+
+        // LEAVING THE GAME
         stompClient.subscribe('/topic/leaveGame', function(message) {
              var leaveData = JSON.parse(message.body);
         });

@@ -19,8 +19,6 @@ CREATE TABLE game_entity (
     player1_id BIGINT,
     player2_id BIGINT,
     winner_id BIGINT,
-    player1_score INT,
-    player2_score INT,
     game_state VARCHAR(50),
     FOREIGN KEY (player1_id) REFERENCES player_entity(player_id),
     FOREIGN KEY (player2_id) REFERENCES player_entity(player_id),

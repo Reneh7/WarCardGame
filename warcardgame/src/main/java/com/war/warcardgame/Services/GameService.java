@@ -8,6 +8,7 @@ import com.war.warcardgame.Models.PlayersEntity;
 import com.war.warcardgame.Repositories.CardsRepository;
 import com.war.warcardgame.Repositories.GameRepository;
 import com.war.warcardgame.Repositories.PlayerRepository;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class GameService {
     }
 
     public GameEntity createNewGame(PlayersEntity player1){
-         GameEntity newGame = new GameEntity(0,0,player1,null,null,gameState.NEW_GAME);
+         GameEntity newGame = new GameEntity(player1,null,null,gameState.NEW_GAME);
          gameRepository.save(newGame);
          return newGame;
     }

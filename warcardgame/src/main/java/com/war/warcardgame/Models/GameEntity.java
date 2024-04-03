@@ -16,10 +16,6 @@ public class GameEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_id")
     private Long gameId;
-    @Column(name = "player1_score")
-    private int player1Score;
-    @Column(name = "player2_score")
-    private int player2Score;
     @ManyToOne
     @JoinColumn(name = "player1_id")
     private PlayersEntity player1;
@@ -33,9 +29,7 @@ public class GameEntity {
     @Column(name = "game_state")
     private GameState gameState;
 
-    public GameEntity(int player1Score, int player2Score, PlayersEntity player1, PlayersEntity player2, PlayersEntity winner, GameState gameState) {
-        this.player1Score = player1Score;
-        this.player2Score = player2Score;
+    public GameEntity(PlayersEntity player1, PlayersEntity player2, PlayersEntity winner, GameState gameState) {
         this.player1 = player1;
         this.player2 = player2;
         this.winner = winner;
