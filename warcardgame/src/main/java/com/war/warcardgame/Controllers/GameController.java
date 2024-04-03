@@ -83,15 +83,21 @@ public class GameController {
     @SendTo("/topic/joinGame")
     public JoinResponse  joinGame(JoinGameRequest request) {
         String sessionId = request.getSessionId();
-
+        JoinResponse response = new JoinResponse();
         PlayersEntity player2 = playerService.createNewPlayer(request.getUsername(),sessionId);
         GameEntity game = gameService.joinGame(request.getGameId(), player2);
 
-        messagingTemplate.convertAndSend("/topic/updateGame", game);
-        JoinResponse response = new JoinResponse();
-        response.setGameId(game != null ? game.getGameId() : null);
-        response.setJoinedPlayerSessionId(sessionId);
+        if (game == null) {
+            System.out.println("inside of game == null");
+            String message = "Game ID does not exist";
+            messagingTemplate.convertAndSend("/topic/gameNotFound", message);
+        }
 
+        messagingTemplate.convertAndSend("/topic/updateGame", game);
+
+        response.setGameId(game.getGameId());
+        response.setJoinedPlayerSessionId(sessionId);
+        System.out.println("response after if" + response);
         return response;
     }
 

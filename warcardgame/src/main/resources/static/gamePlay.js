@@ -27,7 +27,6 @@ function displayPlayer2CardsTest(cards) {
     });
 }
 
-
 function handlePlayCardButtonVisibility(sessionId) {
     var player1PlayedCardButton = document.getElementById('playCard1Button');
     var player2PlayedCardButton = document.getElementById('playCard2Button');
@@ -49,15 +48,8 @@ function sendPlayer1PlayedCardMessageTest(player1Id) {
 }
 
 function displayPlayer1PlayedCardTest(card){
-    const player1PlayedCard = document.getElementById('player1PlayedCard');
-    player1PlayedCard.innerHTML = '';
-
-    const cardContent = card.name + ' - ' + card.suit;
-
-    const cardElement = document.createElement('div');
-    cardElement.textContent = card.name + ' - ' + card.suit;
-
-    player1PlayedCard.appendChild(cardElement);
+    const player1PlayedCardImage = document.getElementById('player1PlayedCardImage');
+    player1PlayedCardImage.src = `/cards/${card.name}_${card.suit}.png`;
 }
 
 
@@ -72,15 +64,8 @@ function sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId) {
 }
 
 function displayPlayer2PlayedCardTest(card){
-    const player2PlayedCard = document.getElementById('player2PlayedCard');
-    player2PlayedCard.innerHTML = '';
-
-    const cardContent = card.name + ' - ' + card.suit;
-
-    const cardElement = document.createElement('div');
-    cardElement.textContent = card.name + ' - ' + card.suit;
-
-    player2PlayedCard.appendChild(cardElement);
+    const player2PlayedCardImage = document.getElementById('player2PlayedCardImage');
+    player2PlayedCardImage.src = `/cards/${card.name}_${card.suit}.png`;
 }
 
 //===========================================================DISPLAY CAPTURE CARDS===============================================
@@ -174,8 +159,11 @@ document.addEventListener('DOMContentLoaded', function() {
            var gameId = document.getElementById('gameID').textContent.trim();
            var player1Session = document.getElementById('player1Session').innerText;
            var player2Session = document.getElementById('player2Session').innerText;
+
            sendPlayer1DealCardsTest(player1Session);
            sendPlayer2DealCardsTest(player2Session);
+
+//           startGameButton.style.display = 'none';
 
        });
    }

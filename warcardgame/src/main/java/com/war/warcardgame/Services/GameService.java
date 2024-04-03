@@ -9,6 +9,7 @@ import com.war.warcardgame.Repositories.CardsRepository;
 import com.war.warcardgame.Repositories.GameRepository;
 import com.war.warcardgame.Repositories.PlayerRepository;
 import org.aspectj.weaver.ast.Test;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -23,12 +24,14 @@ public class GameService {
     private CardsRepository cardsRepository;
     // CHANGE THIS AFTER TESTING
     private CardsService cardsService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, CardsRepository cardsRepository, CardsService cardsService) {
+    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, CardsRepository cardsRepository, CardsService cardsService,SimpMessagingTemplate messagingTemplate) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
         this.cardsRepository = cardsRepository;
         this.cardsService = cardsService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public GameEntity createNewGame(PlayersEntity player1){

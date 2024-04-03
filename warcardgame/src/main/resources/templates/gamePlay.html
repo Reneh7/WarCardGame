@@ -22,13 +22,13 @@
 <div class="player-username">
 <p id="player1"><span th:text="${player1Username != null ? player1Username : 'Player 1'}"></span></p>
 </div>
+<div id="player1Cards" style="color: blue;"></div>
 
-    <div id="player1Cards" style="color: blue;"></div>
+
+<img id="playCard1Button" src="/cards/card_closed.png" alt="Play Card 1" class="play-card-image"/>
+<img id="player1PlayedCardImage">
 
 
-<img id="playCard1Button" src="FaceDown.png" alt="Play Card 1" class="play-card-image"/>
-
-    <div id="player1PlayedCard"></div>
 <div id="player1CapturedCards"  style="color: red;"></div>
 
 
@@ -38,18 +38,20 @@
 
 <div id="player2Cards"></div>
 
+<img id="playCard2Button" src="/cards/card_closed.png" alt="Play Card 2" class="play-card-image2"/>
+<img id="player2PlayedCardImage">
 
-<img id="playCard2Button" src="FaceDown.png" alt="Play Card 2" class="play-card-image2"/>
-<div id="player2PlayedCard"></div>
 <div id="player2CapturedCards"  style="color: red;" ></div>
+
 
 
 <div id ="winner" style="color: green;"> </div>
 
-    <div class="game-buttons">
-        <button id="startGameButton" class="btn btn-primary ">Start Game</button>
-        <button id="leaveGameButton" class="btn btn-danger mt-2">Leave Game</button>
-    </div>
+
+<div class="game-buttons">
+    <button id="leaveGameButton" class="btn btn-danger">Leave Game</button>
+    <button id="startGameButton" class="btn btn-primary mt-2">Start Game</button>
+</div>
 
 
 </div>

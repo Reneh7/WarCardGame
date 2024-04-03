@@ -29,7 +29,14 @@ function connectToWebSocket() {
 
             redirectToGameplayPage(newGameId);
         });
-
+        stompClient.subscribe('/topic/gameNotFound', function(message) {
+            console.log("inside subscribe gameNotFound")
+            var errorMessage = message.body;
+            var gameNotFoundMessage = document.getElementById('gameNotFound');
+            gameNotFoundMessage.innerHTML = errorMessage;
+            showGameIdForm();
+            submitGameIdButton.disabled = true;
+        });
 
 
         // DEALING CARDS
@@ -40,7 +47,6 @@ function connectToWebSocket() {
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player1Session){
-//                displayPlayer1CardsTest(cards);
                 handlePlayCardButtonVisibility(player1Session);
             }
         });
@@ -51,11 +57,9 @@ function connectToWebSocket() {
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player2Session){
-//                displayPlayer2CardsTest(cards);
                 handlePlayCardButtonVisibility(player2Session);
             }
         });
-
 
 
         //PLAYING THE DEALT CARDS
@@ -91,11 +95,11 @@ function connectToWebSocket() {
          // CAPTURING CARDS
          stompClient.subscribe('/topic/capturedCards/player1', function(message) {
              var capturedCards = JSON.parse(message.body);
-             displayPlayer1CapturedCards(capturedCards);
+//             displayPlayer1CapturedCards(capturedCards);
          });
          stompClient.subscribe('/topic/capturedCards/player2', function(message) {
              var capturedCards = JSON.parse(message.body);
-             displayPlayer2CapturedCards(capturedCards);
+//             displayPlayer2CapturedCards(capturedCards);
          });
 
 

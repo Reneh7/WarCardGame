@@ -36,6 +36,20 @@ function redirectToGameplayPage(gameId) {
     window.location.href = "/gameplay?gameId=" + gameId;
 }
 
+//============================================VALIDATIONS================================================================
+
+function validateUsername(username) {
+    return username.trim() !== '';
+}
+
+function validateGameId(gameIdString) {
+    return gameIdString.trim() !== '';
+}
+
+function displayErrorMessage(message) {
+        alert(message);
+}
+
 //==============================================PAGE BUTTONS============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -106,8 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
         submitUsernameButton.addEventListener('click', function(event) {
             event.preventDefault();
             var username = document.getElementById('usernameInput').value;
-            sendMessageCreate(username);
-            closeModal(usernameModal);
+
+            if (validateUsername(username)) {
+                sendMessageCreate(username);
+                closeModal(usernameModal);
+            } else {
+                displayErrorMessage("Please enter a username.");
+            }
         });
     }
 
@@ -120,8 +139,16 @@ document.addEventListener('DOMContentLoaded', function() {
             var gameIdString = document.getElementById('gameIdInput').value;
             var gameId = parseInt(gameIdString);
             var username = document.getElementById('username2Input').value;
-            sendMessageJoin(gameId, username);
-            closeModal(gameIdModal);
+
+            if(validateUsername(username) && validateGameId(gameIdString)){
+                console.log("inside first if in click listener")
+                sendMessageJoin(gameId, username);
+                closeModal(gameIdModal);
+            } else if (!validateUsername(username)) {
+                displayErrorMessage("Please enter a username.");
+            } else {
+                displayErrorMessage("Please enter game id.");
+            }
         });
     }
 });
