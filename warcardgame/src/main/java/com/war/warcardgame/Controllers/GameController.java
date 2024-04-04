@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 public class GameController {
@@ -38,6 +39,7 @@ public class GameController {
     @GetMapping("/gameplay")
     public String gamePlayPage(Model model, @RequestParam(name = "gameId") Long gameId) {
         Optional<GameEntity> optionalGame = gameRepository.findById(gameId);
+        int number = randomNumber();
 
         if (optionalGame.isPresent()) {
             GameEntity game = optionalGame.get();
@@ -58,6 +60,9 @@ public class GameController {
             // players id
             model.addAttribute("player1", player1.getPlayerId() != null ? player1.getPlayerId() : null);
             model.addAttribute("player2", player2 != null ? player2.getPlayerId() : null);
+
+            // version number
+            model.addAttribute("version", number );
 
             return "gamePlay";
         } else {
@@ -116,6 +121,11 @@ public class GameController {
         response.setMessage("Player has left the game");
 
         return response;
+    }
+
+    private int randomNumber(){
+        Random random = new Random();
+        return random.nextInt(500);
     }
 
 }

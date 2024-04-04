@@ -30,7 +30,6 @@ function connectToWebSocket() {
             redirectToGameplayPage(newGameId);
         });
         stompClient.subscribe('/topic/gameNotFound', function(message) {
-            console.log("inside subscribe gameNotFound")
             var errorMessage = message.body;
             var gameNotFoundMessage = document.getElementById('gameNotFound');
             gameNotFoundMessage.innerHTML = errorMessage;
@@ -47,7 +46,7 @@ function connectToWebSocket() {
             var sessionId = localStorage.getItem("sessionId");
 
             if(sessionId === player1Session){
-                handlePlayCardButtonVisibility(player1Session);
+                 handlePlayCardButtonVisibility(player1Session);
             }
         });
         stompClient.subscribe('/topic/dealCardsPlayer2Test', function(message) {
@@ -95,11 +94,11 @@ function connectToWebSocket() {
          // CAPTURING CARDS
          stompClient.subscribe('/topic/capturedCards/player1', function(message) {
              var capturedCards = JSON.parse(message.body);
-//             displayPlayer1CapturedCards(capturedCards);
+             displayPlayer1CapturedCards(capturedCards);
          });
          stompClient.subscribe('/topic/capturedCards/player2', function(message) {
              var capturedCards = JSON.parse(message.body);
-//             displayPlayer2CapturedCards(capturedCards);
+             displayPlayer2CapturedCards(capturedCards);
          });
 
 

@@ -30,15 +30,20 @@ function displayPlayer2CardsTest(cards) {
 function handlePlayCardButtonVisibility(sessionId) {
     var player1PlayedCardButton = document.getElementById('playCard1Button');
     var player2PlayedCardButton = document.getElementById('playCard2Button');
+    var startGameButton = document.getElementById('startGameButton');
     var player1Session = document.getElementById('player1Session').innerText;
     var player2Session = document.getElementById('player2Session').innerText;
+
+    startGameButton.remove();
 
     if (sessionId === player1Session) {
         player1PlayedCardButton.style.display = 'inline-block';
         player2PlayedCardButton.style.display = 'none';
+
     } else if (sessionId === player2Session) {
         player2PlayedCardButton.style.display = 'inline-block';
         player1PlayedCardButton.style.display = 'none';
+
     }
 }
 //===========================================================PLAY CARD=================================================
@@ -71,7 +76,6 @@ function displayPlayer2PlayedCardTest(card){
 //===========================================================DISPLAY CAPTURE CARDS===============================================
 
 function displayPlayer1CapturedCards(capturedCards){
-console.log("Inside displayPlayer1CapturedCards");
     const player1CapturedCards = document.getElementById('player1CapturedCards');
     player1CapturedCards.innerHTML = '';
 
@@ -81,10 +85,22 @@ console.log("Inside displayPlayer1CapturedCards");
         player1CapturedCards.appendChild(cardElement);
     });
 
+    if (capturedCards.length > 0) {
+        player1CapturedCards.style.display = 'block';
+    } else {
+        player1CapturedCards.style.display = 'none';
+    }
+
+    displayPlayer1CapturedCardsCount(capturedCards.length);
+}
+
+function displayPlayer1CapturedCardsCount(count){
+    const player1CapturedCardsCount = document.getElementById('player1CapturedCardsCount');
+    player1CapturedCardsCount.textContent = "Captured cards count: " + count;
 }
 
 function displayPlayer2CapturedCards(capturedCards){
-console.log("Inside displayPlayer2CapturedCards");
+
     const player2CapturedCards = document.getElementById('player2CapturedCards');
     player2CapturedCards.innerHTML = '';
 
@@ -93,7 +109,21 @@ console.log("Inside displayPlayer2CapturedCards");
         cardElement.textContent = card.name + ' - ' + card.suit;
         player2CapturedCards.appendChild(cardElement);
     });
+
+    if (capturedCards.length > 0) {
+        player2CapturedCards.style.display = 'block';
+    } else {
+        player2CapturedCards.style.display = 'none';
+    }
+
+    displayPlayer2CapturedCardsCount(capturedCards.length);
 }
+
+function displayPlayer2CapturedCardsCount(count){
+    const player2CapturedCardsCount = document.getElementById('player2CapturedCardsCount');
+    player2CapturedCardsCount.textContent = "Captured cards count: " + count;
+}
+
 
 //===========================================================DEAL CAPTURED CARDS=================================================
 function dealCapturedCards1(cards) {
@@ -138,6 +168,7 @@ function sendLeaveGameMessage(gameId, playerSession,playerId) {
 }
 
 function updateUIAfterLeaving(gameState) {
+
     if (gameState.player1 === null) {
         if(document.getElementById('player1') != null)
             document.getElementById('player1').innerText = "Player 1";
@@ -162,9 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
            sendPlayer1DealCardsTest(player1Session);
            sendPlayer2DealCardsTest(player2Session);
-
-//           startGameButton.style.display = 'none';
-
        });
    }
 
@@ -187,9 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
              var player1Id = document.getElementById('player1Id').textContent.trim();
              var player2Id = document.getElementById('player2Id').textContent.trim();
-             var gameId = document.getElementById('gameID').textContent.trim();
+             var gameIdText = document.getElementById('gameID').textContent.trim();
+             var gameIdNumber = parseInt(gameIdText.split(' ')[2]);
 
-             sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId);
+             sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameIdNumber);
          });
      }
 
@@ -205,13 +234,14 @@ document.addEventListener('DOMContentLoaded', function() {
            var player1Id = document.getElementById('player1Id').innerText;
            var player2Id = document.getElementById('player2Id').innerText;
 
-           var gameId = document.getElementById('gameID').innerText;
+           var gameIdText = document.getElementById('gameID').textContent.trim();
+           var gameIdNumber = parseInt(gameIdText.split(' ')[2]);
 
            if (player1Session === sessionId) {
-               sendLeaveGameMessage(gameId, player1Session,player1Id);
+               sendLeaveGameMessage(gameIdNumber, player1Session,player1Id);
                localStorage.removeItem('sessionId');
            } else {
-               sendLeaveGameMessage(gameId, player2Session,player2Id);
+               sendLeaveGameMessage(gameIdNumber, player2Session,player2Id);
                localStorage.removeItem('sessionId');
            }
            window.location.href = '/';

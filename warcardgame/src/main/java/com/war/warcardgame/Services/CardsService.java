@@ -220,12 +220,6 @@ public class CardsService {
         } else {
             war(player1Id,player2Id,capturedCardsResponse,gameId);
         }
-
-        if (allCardsPlayed(player2CapturedCards)) {
-            String winner = declareWinner(gameId, player1Id, player2Id);
-            messagingTemplate.convertAndSend("/topic/game/winner", winner);
-        }
-
     }
 
     private CardsEntity drawNextCard(long playerId) {

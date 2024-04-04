@@ -135,3 +135,43 @@ body {
     top: 225px;
     right: 550px;
  }
+
+
+
+#player1CapturedCards {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
+    position: absolute;
+    display: none;
+    top: 510px;
+    right: 515px;
+}
+
+#player1CapturedCardsCount {
+    position: absolute;
+    top: 480px;
+    left: 720px;
+    color: white;
+    font-size: 15px;
+}
+
+
+#player2CapturedCards {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 500px;
+}
+
+#player2CapturedCardsCount {
+    position: absolute;
+    top: 105px;
+    right: 450px;
+    color: white;
+    font-size: 15px;
+}
+

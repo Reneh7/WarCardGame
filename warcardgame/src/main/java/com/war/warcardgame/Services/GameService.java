@@ -22,7 +22,6 @@ public class GameService {
     private PlayerRepository playerRepository;
     private GameState gameState;
     private CardsRepository cardsRepository;
-    // CHANGE THIS AFTER TESTING
     private CardsService cardsService;
     private final SimpMessagingTemplate messagingTemplate;
 
