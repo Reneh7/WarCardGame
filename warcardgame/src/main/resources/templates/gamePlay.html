@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<!--<canvas id = "gameCanvas"></canvas>-->
 <div class="container">
 
 <p id="gameID">Game ID: <span th:text="${gameId}"> </span></p>
@@ -45,7 +46,6 @@
 <div id="player2CapturedCardsCount"></div>
 
 
-
 <div id ="winner" style="color: green;"> </div>
 
 
@@ -63,6 +63,7 @@
 <script src="/app.js"></script>
 <script src="/websocket.js?version="th:text="${version}"></script>
 <script src="/gamePlay.js?version="th:text="${version}"></script>
+<!--<script src="/webjars/phaser/3.55.2/phaser.min.js"></script>-->
 </body>
 </html>
 

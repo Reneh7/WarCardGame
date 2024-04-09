@@ -27,14 +27,14 @@ function connectToWebSocket() {
             var newGameId = response.gameId;
             var joinedPlayerSessionId = response.joinedPlayerSessionId;
 
-            redirectToGameplayPage(newGameId);
-        });
-        stompClient.subscribe('/topic/gameNotFound', function(message) {
-            var errorMessage = message.body;
-            var gameNotFoundMessage = document.getElementById('gameNotFound');
-            gameNotFoundMessage.innerHTML = errorMessage;
-            showGameIdForm();
-            submitGameIdButton.disabled = true;
+
+                if (!response.found) {
+                     if (joinedPlayerSessionId === getSessionId()) {
+                        displayErrorMessage("Game not found!");
+                     }
+                } else {
+                   redirectToGameplayPage(newGameId);
+               }
         });
 
 
@@ -141,8 +141,8 @@ function connectToWebSocket() {
              var leaveData = JSON.parse(message.body);
         });
         stompClient.subscribe('/topic/updateGameAfterLeave', function(message) {
-            var gameState = JSON.parse(message.body);
-            updateUIAfterLeaving(gameState);
+            var response = JSON.parse(message.body);
+            updateUIAfterLeaving(response);
         });
     });
 }

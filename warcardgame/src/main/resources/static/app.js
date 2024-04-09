@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
     }
 
-    // Function to close the modal
     function closeModal(modal) {
         modal.style.display = 'none';
     }
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
             var username = document.getElementById('username2Input').value;
 
             if(validateUsername(username) && validateGameId(gameIdString)){
-                console.log("inside first if in click listener")
                 sendMessageJoin(gameId, username);
                 closeModal(gameIdModal);
             } else if (!validateUsername(username)) {

@@ -168,13 +168,22 @@ function sendLeaveGameMessage(gameId, playerSession,playerId) {
 }
 
 function updateUIAfterLeaving(gameState) {
+    var currentSessionId = getSessionId();
 
-    if (gameState.player1 === null) {
-        if(document.getElementById('player1') != null)
-            document.getElementById('player1').innerText = "Player 1";
-    } else if (gameState.player2 === null) {
-        if(document.getElementById('player2') != null)
-            document.getElementById('player2').innerText = "Player 2";
+    if (currentSessionId === gameState.player1Session) {
+        if (gameState.game.player1 !== null) {
+            alert("Player 2 has left the game.");
+            if (document.getElementById('player2') != null) {
+                document.getElementById('player2').innerText = "Player 2";
+            }
+        }
+    } else if (currentSessionId === gameState.player2Session) {
+        if (gameState.game.player2 !== null) {
+            alert("Player 1 has left the game.");
+            if (document.getElementById('player1') != null) {
+                document.getElementById('player1').innerText = "Player 1";
+            }
+        }
     }
 }
 

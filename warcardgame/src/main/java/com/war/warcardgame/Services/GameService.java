@@ -8,8 +8,6 @@ import com.war.warcardgame.Models.PlayersEntity;
 import com.war.warcardgame.Repositories.CardsRepository;
 import com.war.warcardgame.Repositories.GameRepository;
 import com.war.warcardgame.Repositories.PlayerRepository;
-import org.aspectj.weaver.ast.Test;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -18,23 +16,22 @@ import java.util.Optional;
 
 @Service
 public class GameService {
-    private GameRepository gameRepository;
-    private PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
     private GameState gameState;
-    private CardsRepository cardsRepository;
-    private CardsService cardsService;
-    private final SimpMessagingTemplate messagingTemplate;
+    private final CardsRepository cardsRepository;
+    private final CardsService cardsService;
 
-    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, CardsRepository cardsRepository, CardsService cardsService,SimpMessagingTemplate messagingTemplate) {
+
+    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, CardsRepository cardsRepository, CardsService cardsService) {
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
         this.cardsRepository = cardsRepository;
         this.cardsService = cardsService;
-        this.messagingTemplate = messagingTemplate;
     }
 
     public GameEntity createNewGame(PlayersEntity player1){
-         GameEntity newGame = new GameEntity(player1,null,null,gameState.NEW_GAME);
+         GameEntity newGame = new GameEntity(player1,null,null, GameState.NEW_GAME);
          gameRepository.save(newGame);
          return newGame;
     }
@@ -50,6 +47,8 @@ public class GameService {
                 gameRepository.save(game);
                 return game;
             }
+
+
         }
         return null;
     }
@@ -74,12 +73,13 @@ public class GameService {
                 game.setWinner(game.getPlayer1());
                 reDealCards(game, game.getPlayer1(), game.getPlayer2());
             }
-
-            if (game.getPlayer1() == null || game.getPlayer2() == null) {
+            if (game.getPlayer1() == null && game.getPlayer2() == null) {
+                gameRepository.delete(game);
+            } else {
                 game.setGameState(GameState.GAME_ENDED);
+                gameRepository.save(game);
             }
 
-            gameRepository.save(game);
             playerRepository.delete(player);
             cardsService.resetTurn();
             cardsService.resetCapturedCards();

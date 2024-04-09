@@ -84,43 +84,67 @@ public class GameController {
         return response;
     }
 
+//    @MessageMapping("/games/join")
+//    @SendTo("/topic/joinGame")
+//    public JoinResponse joinGame(JoinGameRequest request) {
+//        String sessionId = request.getSessionId();
+//        JoinResponse response = new JoinResponse();
+//
+//        Optional<GameEntity> checkGame=gameRepository.findById(request.getGameId());
+//
+//        if (checkGame.isEmpty()) {
+//            response.setJoinedPlayerSessionId(sessionId);
+//            response.setFound(false);
+//        } else {
+//            PlayersEntity player2 = playerService.createNewPlayer(request.getUsername(),sessionId);
+//            GameEntity game = gameService.joinGame(request.getGameId(), player2);
+//            response.setFound(true);
+//            response.setGameId(game.getGameId());
+//            response.setJoinedPlayerSessionId(sessionId);
+//        }
+//        return response;
+//    }
+
     @MessageMapping("/games/join")
     @SendTo("/topic/joinGame")
-    public JoinResponse  joinGame(JoinGameRequest request) {
+    public JoinResponse joinGame(JoinGameRequest request) {
         String sessionId = request.getSessionId();
         JoinResponse response = new JoinResponse();
-        PlayersEntity player2 = playerService.createNewPlayer(request.getUsername(),sessionId);
-        GameEntity game = gameService.joinGame(request.getGameId(), player2);
 
-        if (game == null) {
-            System.out.println("inside of game == null");
-            String message = "Game ID does not exist";
-            messagingTemplate.convertAndSend("/topic/gameNotFound", message);
+        Optional<GameEntity> checkGame = gameRepository.findById(request.getGameId());
+
+        if (checkGame.isPresent()) {
+            PlayersEntity player2 = playerService.createNewPlayer(request.getUsername(), sessionId);
+            GameEntity game = gameService.joinGame(request.getGameId(), player2);
+            response.setFound(true);
+            response.setGameId(game.getGameId());
+            response.setJoinedPlayerSessionId(sessionId);
+        } else {
+            response.setJoinedPlayerSessionId(sessionId);
+            response.setFound(false);
         }
-
-        messagingTemplate.convertAndSend("/topic/updateGame", game);
-
-        response.setGameId(game.getGameId());
-        response.setJoinedPlayerSessionId(sessionId);
-        System.out.println("response after if" + response);
         return response;
     }
 
-
-
     @MessageMapping("/games/leave")
     @SendTo("/topic/leaveGame")
-    public LeaveGameResponse leaveGame(LeaveGameRequest request){
+    public void leaveGame(LeaveGameRequest request){
         gameService.leaveGame(request);
 
         Optional<GameEntity> game = gameRepository.findById(request.getGameId());
-        messagingTemplate.convertAndSend("/topic/updateGameAfterLeave", game);
-
         LeaveGameResponse response = new LeaveGameResponse();
-        PlayersEntity player = playerRepository.findPlayerBySessionId(request.getPlayerSession());
-        response.setMessage("Player has left the game");
+        if (game.isPresent()) {
+            GameEntity gameEntity = game.get();
+            PlayersEntity player1 = gameEntity.getPlayer1();
+            PlayersEntity player2 = gameEntity.getPlayer2();
+            String player1Session = player1 != null ? player1.getSessionId() : null;
+            String player2Session = player2 != null ? player2.getSessionId() : null;
 
-        return response;
+            response.setGame(gameEntity);
+            response.setPlayer1Session(player1Session);
+            response.setPlayer2Session(player2Session);
+            messagingTemplate.convertAndSend("/topic/updateGameAfterLeave", response);
+        }
     }
 
     private int randomNumber(){

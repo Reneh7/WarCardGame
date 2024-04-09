@@ -248,9 +248,11 @@ public class CardsService {
         if(player1CapturedCards.size() > player2CapturedCards.size()){
             game.setWinner(player1);
             return player1.getUsername();
-        } else {
+        } else if(player1CapturedCards.size() < player2CapturedCards.size()){
             game.setWinner(player2);
             return player2.getUsername();
+        } else {
+            return "Tie";
         }
     }
 

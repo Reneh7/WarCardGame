@@ -34,6 +34,9 @@ dependencies {
 	//Spring Session Dependency
 	implementation 'org.springframework.session:spring-session-core:2.5.2'
 
+	//Phaser
+	implementation 'org.webjars.npm:phaser:3.55.2'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

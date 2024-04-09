@@ -6,4 +6,5 @@ import lombok.Data;
 public class JoinResponse {
     private Long gameId;
     private String joinedPlayerSessionId;
+    private boolean isFound;
 }
