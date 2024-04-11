@@ -80,6 +80,51 @@ h1 {
       border-radius: 10px;
       background-color: rgba(0, 0, 0, 0.5);
  }
+/*
+.player-username {
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    border: 2px solid white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.player1.bottom {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.player2.top {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.player2-username {
+    position: absolute;
+    color: white;
+    font-size: 20px;
+    border: 2px solid white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.player2-username.bottom {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.player1-username.top {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+*/
 
 body {
      background-image: url('greenbg.jpg');

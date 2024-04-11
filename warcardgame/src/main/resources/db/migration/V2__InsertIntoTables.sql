@@ -15,3 +15,4 @@ INSERT INTO card_entity (name, suit, rank, is_played, deal_order) VALUES
     ('6', 'Spades', 6, false, -1), ('7', 'Spades', 7, false, -1), ('8', 'Spades', 8, false, -1), ('9', 'Spades', 9, false, -1),
     ('10', 'Spades', 10, false, -1), ('Jack', 'Spades', 11, false, -1), ('Queen', 'Spades', 12, false, -1), ('King', 'Spades', 13, false, -1),
     ('Ace', 'Spades', 14, false, -1);
+

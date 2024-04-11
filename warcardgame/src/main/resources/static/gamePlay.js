@@ -1,3 +1,82 @@
+////===========================================PLAYERS POV======================================================
+//function checkPlayer(playerSession,currentSession){
+//
+//    var currentPlayer = (playerSession === currentSession) ? "player1" : "player2";
+//
+//    if (currentPlayer === "player1") {
+//        document.querySelector('.player-username.player1').classList.add('bottom');
+//        document.querySelector('.player-username.player2').classList.add('top');
+//    } else if (currentPlayer === "player2") {
+//        document.querySelector('.player-username.player1').classList.add('top');
+//        document.querySelector('.player-username.player2').classList.add('bottom');
+//    }
+//}
+
+
+//===========================================ANIMATION======================================================
+var player1CardSprite;
+var player2CardSprite;
+var game;
+var config;
+
+
+function preload() {
+    const suits = ['Clubs', 'Spades', 'Hearts', 'Diamonds'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+
+        for (const suit of suits) {
+            for (const value of values) {
+                const cardName = `${value}_${suit}`;
+                this.load.image(cardName, `/cards/${cardName}.png`, { frameWidth: 100, frameHeight: 150 });
+            }
+        }
+}
+
+function create() {
+    player1CardSprite = this.add.sprite(400, 300, "2_Clubs");
+    player1CardSprite.setOrigin(0.5);
+    player1CardSprite.setScale(0);
+
+    player2CardSprite = this.add.sprite(400, 300, "2_Clubs");
+    player2CardSprite.setOrigin(0.5);
+    player2CardSprite.setScale(0);
+
+}
+
+function playCardAnimation(scene,cardSprite,endPosition) {
+    const startX = endPosition.startX;
+    const startY = endPosition.startY;
+    const endX = endPosition.endX;
+    const endY = endPosition.endY;
+
+    cardSprite.setX(startX);
+    cardSprite.setY(startY);
+
+    scene.tweens.add({
+        targets: cardSprite,
+         x: endX,
+         y: endY,
+         scaleX: 0.25,
+         scaleY: 0.25,
+         duration: 500,
+         ease: 'Linear',
+    });
+}
+
+config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    transparent: true,
+    scene: {
+        preload: preload,
+        create: create
+    }
+};
+
+game = new Phaser.Game(config);
+
+
 //===========================================START GAME / DEAL CARDS======================================================
 function sendPlayer1DealCardsTest(playerSession){
     stompClient.send("/app/cards/dealPlayer1Test", {}, playerSession);
@@ -54,7 +133,13 @@ function sendPlayer1PlayedCardMessageTest(player1Id) {
 
 function displayPlayer1PlayedCardTest(card){
     const player1PlayedCardImage = document.getElementById('player1PlayedCardImage');
-    player1PlayedCardImage.src = `/cards/${card.name}_${card.suit}.png`;
+    const playCardButton1 = document.getElementById('playCard1Button');
+
+    const startX = playCardButton1.offsetLeft + playCardButton1.offsetWidth / 2;
+    const startY = playCardButton1.offsetTop + playCardButton1.offsetHeight / 2;
+
+    player1CardSprite.setTexture(`${card.name}_${card.suit}`);
+    playCardAnimation(game.scene.scenes[0],player1CardSprite,{endX: 600, endY: 300, startX: startX, startY: startY});
 }
 
 
@@ -64,13 +149,19 @@ function sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId) {
           player2Id : player2Id,
           gameId : gameId
     };
-
     stompClient.send("/app/cards/playCardPlayer2Test", {}, JSON.stringify(message));
 }
 
 function displayPlayer2PlayedCardTest(card){
     const player2PlayedCardImage = document.getElementById('player2PlayedCardImage');
-    player2PlayedCardImage.src = `/cards/${card.name}_${card.suit}.png`;
+    const playCardButton2 = document.getElementById('playCard2Button');
+
+    const startX = playCardButton2.offsetLeft + playCardButton2.offsetWidth / 2;
+    const startY = playCardButton2.offsetTop + playCardButton2.offsetHeight / 2;
+
+    player2CardSprite.setTexture(`${card.name}_${card.suit}`);
+    playCardAnimation(game.scene.scenes[0], player2CardSprite,{endX: 600, endY: 200, startX: startX, startY: startY});
+
 }
 
 //===========================================================DISPLAY CAPTURE CARDS===============================================
@@ -125,26 +216,26 @@ function displayPlayer2CapturedCardsCount(count){
 }
 
 
-//===========================================================DEAL CAPTURED CARDS=================================================
-function dealCapturedCards1(cards) {
-    const player1CardsContainer = document.getElementById('player1Cards');
-    player1CardsContainer.innerHTML = '';
-    cards.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.textContent = card.name + ' - ' + card.suit;
-        player1CardsContainer.appendChild(cardElement);
-    });
-}
-
-function dealCapturedCards2(cards) {
-    const player1CardsContainer = document.getElementById('player2Cards');
-    player1CardsContainer.innerHTML = '';
-    cards.forEach(card => {
-        const cardElement = document.createElement('div');
-        cardElement.textContent = card.name + ' - ' + card.suit;
-        player1CardsContainer.appendChild(cardElement);
-    });
-}
+////===========================================================DEAL CAPTURED CARDS=================================================
+//function dealCapturedCards1(cards) {
+//    const player1CardsContainer = document.getElementById('player1Cards');
+//    player1CardsContainer.innerHTML = '';
+//    cards.forEach(card => {
+//        const cardElement = document.createElement('div');
+//        cardElement.textContent = card.name + ' - ' + card.suit;
+//        player1CardsContainer.appendChild(cardElement);
+//    });
+//}
+//
+//function dealCapturedCards2(cards) {
+//    const player1CardsContainer = document.getElementById('player2Cards');
+//    player1CardsContainer.innerHTML = '';
+//    cards.forEach(card => {
+//        const cardElement = document.createElement('div');
+//        cardElement.textContent = card.name + ' - ' + card.suit;
+//        player1CardsContainer.appendChild(cardElement);
+//    });
+//}
 
 //===========================================================WINNER MESSAGE=================================================
 
@@ -200,6 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
            var player1Session = document.getElementById('player1Session').innerText;
            var player2Session = document.getElementById('player2Session').innerText;
 
+           console.log("inside startGameButton");
+
            sendPlayer1DealCardsTest(player1Session);
            sendPlayer2DealCardsTest(player2Session);
        });
@@ -213,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
          var player1Id = document.getElementById('player1Id').textContent.trim();
          sendPlayer1PlayedCardMessageTest(player1Id);
+
        });
    }
 

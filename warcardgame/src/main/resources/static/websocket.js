@@ -17,6 +17,9 @@ function connectToWebSocket() {
             var body = JSON.parse(message.body);
             var newGameId = body.gameId;
             var createdPlayerSessionId = body.createdPlayerSessionId;
+            var currentSession = getSessionId();
+
+//            checkPlayer(createdPlayerSessionId, currentSession);
 
             if (createdPlayerSessionId === getSessionId()) {
                 redirectToGameplayPage(newGameId);
@@ -26,15 +29,17 @@ function connectToWebSocket() {
             var response = JSON.parse(message.body);
             var newGameId = response.gameId;
             var joinedPlayerSessionId = response.joinedPlayerSessionId;
+            var currentSession = getSessionId();
 
+//           checkPlayer(joinedPlayerSessionId, currentSession);
 
-                if (!response.found) {
-                     if (joinedPlayerSessionId === getSessionId()) {
-                        displayErrorMessage("Game not found!");
-                     }
-                } else {
-                   redirectToGameplayPage(newGameId);
-               }
+            if (!response.found) {
+                if (joinedPlayerSessionId === getSessionId()) {
+                    displayErrorMessage("Game not found!");
+                }
+            } else {
+               redirectToGameplayPage(newGameId);
+            }
         });
 
 
@@ -54,6 +59,8 @@ function connectToWebSocket() {
             var cards = response.cards;
             var player2Session = response.playerSession;
             var sessionId = localStorage.getItem("sessionId");
+
+            console.log("inside dealCardsPlayer2Test");
 
             if(sessionId === player2Session){
                 handlePlayCardButtonVisibility(player2Session);
@@ -105,27 +112,27 @@ function connectToWebSocket() {
 
 
          // DEALING CAPTURED CARDS
-         stompClient.subscribe('/topic/dealCapturedCards1', function(message) {
-             var response = JSON.parse(message.body);
-             var cards = response.cards;
-             var player1Session = response.playerSession;
-             var sessionId = localStorage.getItem("sessionId");
-
-             if(sessionId === player1Session){
-                dealCapturedCards1(cards);
-             }
-
-         });
-         stompClient.subscribe('/topic/dealCapturedCards2', function(message) {
-             var response = JSON.parse(message.body);
-             var cards = response.cards;
-             var player2Session = response.playerSession;
-             var sessionId = localStorage.getItem("sessionId");
-
-             if(sessionId === player2Session){
-                dealCapturedCards2(cards);
-             }
-         });
+//         stompClient.subscribe('/topic/dealCapturedCards1', function(message) {
+//             var response = JSON.parse(message.body);
+//             var cards = response.cards;
+//             var player1Session = response.playerSession;
+//             var sessionId = localStorage.getItem("sessionId");
+//
+//             if(sessionId === player1Session){
+//                dealCapturedCards1(cards);
+//             }
+//
+//         });
+//         stompClient.subscribe('/topic/dealCapturedCards2', function(message) {
+//             var response = JSON.parse(message.body);
+//             var cards = response.cards;
+//             var player2Session = response.playerSession;
+//             var sessionId = localStorage.getItem("sessionId");
+//
+//             if(sessionId === player2Session){
+//                dealCapturedCards2(cards);
+//             }
+//         });
 
 
 
