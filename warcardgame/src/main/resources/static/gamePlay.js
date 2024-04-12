@@ -119,12 +119,25 @@ function sendPlayer1PlayedCardMessageTest(player1Id) {
 function displayPlayer1PlayedCardTest(card){
     const player1PlayedCardImage = document.getElementById('player1PlayedCardImage');
     const playCardButton1 = document.getElementById('playCard1Button');
+    const player1Session = document.getElementById('player1Session').innerText;
+    const currentSession = localStorage.getItem("sessionId");
 
     const startX = playCardButton1.offsetLeft + playCardButton1.offsetWidth / 2;
     const startY = playCardButton1.offsetTop + playCardButton1.offsetHeight / 2;
 
     player1CardSprite.setTexture(`${card.name}_${card.suit}`);
-    playCardAnimation(game.scene.scenes[0],player1CardSprite,{endX: 600, endY: 300, startX: startX, startY: startY});
+
+    let endX, endY;
+    if (player1Session === currentSession) {
+        endX = 600;
+        endY = 280; // the lower the number the higher the card
+    } else {
+        endX = 600;
+        endY = 150;
+    }
+
+
+    playCardAnimation(game.scene.scenes[0],player1CardSprite,{ endX: endX, endY: endY, startX: startX, startY: startY });
 }
 
 
@@ -140,14 +153,24 @@ function sendPlayer2PlayedCardMessageTest(player1Id,player2Id,gameId) {
 function displayPlayer2PlayedCardTest(card){
     const player2PlayedCardImage = document.getElementById('player2PlayedCardImage');
     const playCardButton2 = document.getElementById('playCard2Button');
+    const player2Session = document.getElementById('player2Session').innerText;
+    const currentSession = localStorage.getItem("sessionId");
 
     const startX = playCardButton2.offsetLeft + playCardButton2.offsetWidth / 2;
     const startY = playCardButton2.offsetTop + playCardButton2.offsetHeight / 2;
 
-
     player2CardSprite.setTexture(`${card.name}_${card.suit}`);
-    playCardAnimation(game.scene.scenes[0], player2CardSprite,{endX: 600, endY: 200, startX: startX, startY: startY});
 
+    let endX, endY;
+    if (player2Session === currentSession) {
+        endX = 600;
+        endY = 270;
+    } else {
+        endX = 600;
+        endY = 150;
+    }
+
+    playCardAnimation(game.scene.scenes[0], player2CardSprite, { endX: endX, endY: endY, startX: startX, startY: startY });
 }
 
 //===========================================================DISPLAY CAPTURE CARDS===============================================
