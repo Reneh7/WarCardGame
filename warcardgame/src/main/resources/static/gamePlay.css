@@ -1,22 +1,106 @@
-/* styles.css */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    background-image: url('greenbg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    height: 100vh;
 }
 
 #gameID {
     position: absolute;
-    top: 20px;
     left: 20px;
+    color: white;
+    font-size: 18px;
+    margin-top: 15px;
 }
+
+
+#player1 {
+    margin-top: 20px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 20px;
+    border: 2px solid white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#player1CapturedCards {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
+    position: absolute;
+    display: none;
+    top: 510px;
+    right: 515px;
+}
+#player1CapturedCardsCount {
+    position: absolute;
+    top: 480px;
+    left: 720px;
+    color: white;
+    font-size: 15px;
+}
+#playCard1Button {
+    cursor: pointer;
+    display: none;
+    width: 70px;
+    position: absolute;
+    top: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+
+
+#player2 {
+    margin-top: 20px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 20px;
+    border: 2px solid white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#player2CapturedCards {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
+    position: absolute;
+    display: none;
+    top: 10px;
+    right: 500px;
+}
+#player2CapturedCardsCount {
+    position: absolute;
+    top: 105px;
+    right: 450px;
+    color: white;
+    font-size: 15px;
+}
+#playCard2Button {
+    cursor: pointer;
+    display: none;
+    width: 70px;
+    position: absolute;
+    top:  110px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
 
 #startGameButton {
     position: absolute;
@@ -30,193 +114,61 @@ body {
     right: 20px;
 }
 
-h1 {
-    text-align: center;
-}
-
-#player1 {
-    margin-top: 20px;
-}
-
-#player1Cards {
-    margin-top: 10px;
-}
-
-#player2 {
-    margin-top: 20px;
-}
-
-#player2Cards {
-    margin-top: 10px;
-}
-
 .game-buttons {
        top: 10px;
        right: 10px;
 }
 
-.player-username {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 20px;
-      border: 2px solid white;
-      padding: 5px 10px;
-      border-radius: 10px;
-      background-color: rgba(0, 0, 0, 0.5);
+/*================================Flipping=================================*/
+
+/*for player 2 (captured)*/
+.captured-cards-player1 {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
+    position: absolute;
+    display: none;
+    top: 510px !important;
+    right: 495px !important;
 }
 
-.player2-username {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 20px;
-      border: 2px solid white;
-      padding: 5px 10px;
-      border-radius: 10px;
-      background-color: rgba(0, 0, 0, 0.5);
- }
-/*
-.player-username {
+/*for player 1 (captured)*/
+.captured-cards-player2 {
+    max-width: 70px;
+    height: auto;
+    margin: 0 auto;
     position: absolute;
+    display: none;
+    top: 10px !important;
+    right: 500px !important;
+}
+
+/*for player 2 (count)*/
+.Captured-Cards-Count1 {
+    position: absolute;
+    top: 490px !important;
+    left: 730px !important;
     color: white;
-    font-size: 20px;
-    border: 2px solid white;
-    padding: 5px 10px;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 15px;
 }
-
-.player1.bottom {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.player2.top {
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.player2-username {
+/*for player 1 (count)*/
+.Captured-Cards-Count2 {
     position: absolute;
-    color: white;
-    font-size: 20px;
-    border: 2px solid white;
-    padding: 5px 10px;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.player2-username.bottom {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.player1-username.top {
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-*/
-
-body {
-     background-image: url('greenbg.jpg');
-     background-size: cover;
-     background-position: center;
-     background-attachment: fixed;
-     background-repeat: no-repeat;
-     height: 100vh;
-}
-
-#gameID {
-      color: white;
-      font-size: 18px;
-      margin-top: 15px;
-}
-
-.play-card-image {
-    cursor: pointer;
-    display: none;
-    width: 70px;
-    position: absolute;
-    top: 400px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.play-card-image2 {
-    cursor: pointer;
-    display: none;
-    width: 70px;
-    position: absolute;
-    top:  110px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-#player1PlayedCardImage{
-    max-width: 70px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    position: absolute;
-    top:  300px;
-    left:  550px;
- }
-
-#player2PlayedCardImage {
-    max-width: 70px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    position: absolute;
-    top: 225px;
-    right: 550px;
- }
-
-
-
-#player1CapturedCards {
-    max-width: 70px;
-    height: auto;
-    margin: 0 auto;
-    position: absolute;
-    display: none;
-    top: 510px;
-    right: 515px;
-}
-
-#player1CapturedCardsCount {
-    position: absolute;
-    top: 480px;
-    left: 720px;
+    top: 100px !important;
+    right: 80px !important;
     color: white;
     font-size: 15px;
 }
 
-
-#player2CapturedCards {
-    max-width: 70px;
-    height: auto;
-    margin: 0 auto;
+/*for player 2 (play button)*/
+.play-Card-1 {
+    cursor: pointer;
     display: none;
+    width: 70px;
     position: absolute;
-    top: 10px;
-    right: 500px;
+    top: 400px !important;
+    left: 50% !important;
+    transform: translateX(-50%);
 }
 
-#player2CapturedCardsCount {
-    position: absolute;
-    top: 105px;
-    right: 450px;
-    color: white;
-    font-size: 15px;
-}
 

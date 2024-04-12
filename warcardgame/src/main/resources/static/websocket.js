@@ -1,3 +1,4 @@
+
 var stompClient = null;
 
 function connectToWebSocket() {
@@ -19,8 +20,6 @@ function connectToWebSocket() {
             var createdPlayerSessionId = body.createdPlayerSessionId;
             var currentSession = getSessionId();
 
-//            checkPlayer(createdPlayerSessionId, currentSession);
-
             if (createdPlayerSessionId === getSessionId()) {
                 redirectToGameplayPage(newGameId);
             }
@@ -30,8 +29,6 @@ function connectToWebSocket() {
             var newGameId = response.gameId;
             var joinedPlayerSessionId = response.joinedPlayerSessionId;
             var currentSession = getSessionId();
-
-//           checkPlayer(joinedPlayerSessionId, currentSession);
 
             if (!response.found) {
                 if (joinedPlayerSessionId === getSessionId()) {

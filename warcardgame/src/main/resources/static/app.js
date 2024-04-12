@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'none';
     }
 
+
     // Create game button
     var createGameButton = document.getElementById('createGameButton');
     if (createGameButton) {

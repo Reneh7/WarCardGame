@@ -12,58 +12,46 @@
 
 <div class="container">
 
-<p id="gameID">Game ID: <span th:text="${gameId}"> </span></p>
+    <p id="gameID">Game ID: <span th:text="${gameId}"> </span></p>
+    <p id="player1Session" style="display: none;"><span th:text="${player1Session}"></span></p>
+    <p id="player2Session" style="display: none;"><span th:text="${player2Session}"></span></p>
+    <p id="player1Id" style="display: none;"><span th:text="${player1}"></span></p>
+    <p id="player2Id" style="display: none;"><span th:text="${player2}"></span></p>
 
-<p id="player1Session" style="display: none;"><span th:text="${player1Session}"></span></p>
-<p id="player2Session" style="display: none;"><span th:text="${player2Session}"></span></p>
+    <!-- First section for Player 2 -->
+    <div id="player1-section">
+        <p id="player1"><span th:text="${player1Username != null ? player1Username : 'Player 1'}"></span></p>
+        <div id="player1Cards"></div>
+        <img id="playCard1Button" src="/card_closed.png" alt="Play Card 1"/>
+        <img id="player1PlayedCardImage">
+        <img id="player1CapturedCards" src="/card_closed.png">
+        <div id="player1CapturedCardsCount"></div>
+    </div>
 
-<p id="player1Id" style="display: none;"><span th:text="${player1}"></span></p>
-<p id="player2Id" style="display: none;"><span th:text="${player2}"></span></p>
+    <!-- Second section for Player 2 -->
+    <div id="player2-section">
+        <p id="player2"><span th:text="${player2Username != null ? player2Username : 'Player 2'}"></span></p>
+        <div id="player2Cards"></div>
+        <img id="playCard2Button" src="/card_closed.png" alt="Play Card 2"/>
+        <img id="player2PlayedCardImage">
+        <img id="player2CapturedCards" src="/card_closed.png">
+        <div id="player2CapturedCardsCount"></div>
+    </div>
 
-<div class="player-username">
-<p id="player1"><span th:text="${player1Username != null ? player1Username : 'Player 1'}"></span></p>
+    <!-- Winner and game buttons -->
+    <div id="winner" style="color: green;"> </div>
+    <div class="game-buttons">
+        <button id="leaveGameButton" class="btn btn-danger">Leave Game</button>
+        <button id="startGameButton" class="btn btn-primary mt-2">Start Game</button>
+    </div>
 </div>
-<div id="player1Cards" style="color: blue;"></div>
-
-
-<img id="playCard1Button" src="/card_closed.png" alt="Play Card 1" class="play-card-image"/>
-<img id="player1PlayedCardImage">
-
-<img id="player1CapturedCards" src="/card_closed.png">
-<div id="player1CapturedCardsCount"></div>
-
-
-<div class="player2-username">
-    <p id="player2"><span th:text="${player2Username != null ? player2Username : 'Player 2'}"></span></p>
-</div>
-
-<div id="player2Cards"></div>
-
-<img id="playCard2Button" src="/card_closed.png" alt="Play Card 2" class="play-card-image2"/>
-<img id="player2PlayedCardImage">
-
-<img id="player2CapturedCards" src="/card_closed.png">
-<div id="player2CapturedCardsCount"></div>
-
-
-<div id ="winner" style="color: green;"> </div>
-
-
-<div class="game-buttons">
-    <button id="leaveGameButton" class="btn btn-danger">Leave Game</button>
-    <button id="startGameButton" class="btn btn-primary mt-2">Start Game</button>
-</div>
-
-</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="/app.js"></script>
-<script src="/websocket.js?version="th:text="${version}"></script>
-<script src="/gamePlay.js?version=800"></script>
+<script src="/app.js?version=12"></script>
+<script src="/websocket.js?version=12"></script>
+<script src="/gamePlay.js?version=12"></script>
 </body>
 </html>
-
 

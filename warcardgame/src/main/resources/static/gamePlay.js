@@ -1,18 +1,3 @@
-////===========================================PLAYERS POV======================================================
-//function checkPlayer(playerSession,currentSession){
-//
-//    var currentPlayer = (playerSession === currentSession) ? "player1" : "player2";
-//
-//    if (currentPlayer === "player1") {
-//        document.querySelector('.player-username.player1').classList.add('bottom');
-//        document.querySelector('.player-username.player2').classList.add('top');
-//    } else if (currentPlayer === "player2") {
-//        document.querySelector('.player-username.player1').classList.add('top');
-//        document.querySelector('.player-username.player2').classList.add('bottom');
-//    }
-//}
-
-
 //===========================================ANIMATION======================================================
 var player1CardSprite;
 var player2CardSprite;
@@ -159,6 +144,7 @@ function displayPlayer2PlayedCardTest(card){
     const startX = playCardButton2.offsetLeft + playCardButton2.offsetWidth / 2;
     const startY = playCardButton2.offsetTop + playCardButton2.offsetHeight / 2;
 
+
     player2CardSprite.setTexture(`${card.name}_${card.suit}`);
     playCardAnimation(game.scene.scenes[0], player2CardSprite,{endX: 600, endY: 200, startX: startX, startY: startY});
 
@@ -277,10 +263,46 @@ function updateUIAfterLeaving(gameState) {
         }
     }
 }
+function adjustLayoutForPlayer(player2Session, currentSession) {
+
+    if (player2Session === currentSession) {
+       //Captured Cards
+        var player1CapturedCards = document.getElementById('player1CapturedCards');
+        var player2CapturedCards = document.getElementById('player2CapturedCards');
+
+        player1CapturedCards.classList.add('captured-cards-player2');
+        player2CapturedCards.classList.add('captured-cards-player1');
+
+        //Captured Cards count
+        var player1CapturedCardsCounts = document.getElementById('player1CapturedCardsCount');
+        var player2CapturedCardsCounts = document.getElementById('player2CapturedCardsCount');
+
+        player1CapturedCardsCounts.classList.add('Captured-Cards-Count2');
+        player2CapturedCardsCounts.classList.add('Captured-Cards-Count1');
+
+        //Play Card Button
+        var player2PlayCard = document.getElementById('playCard2Button');
+        player2PlayCard.classList.add('play-Card-1');
+
+        //Play Usernames
+        var player1UsernameSpan = document.querySelector('#player1 span');
+        var player2UsernameSpan = document.querySelector('#player2 span');
+        var tempText = player1UsernameSpan.textContent;
+        player1UsernameSpan.textContent = player2UsernameSpan.textContent;
+        player2UsernameSpan.textContent = tempText;
+    }
+}
+
 
 //===========================================================PAGE BUTTONS=================================================
 
 document.addEventListener('DOMContentLoaded', function() {
+     var player2Session = document.getElementById('player2Session').innerText;
+     var currentSession = localStorage.getItem("sessionId");
+
+     console.log("inside player2Session",player2Session);
+     console.log("inside currentSession",currentSession);
+     adjustLayoutForPlayer(player2Session, currentSession);
 
    // Start game button
    var startGameButton = document.getElementById('startGameButton');
