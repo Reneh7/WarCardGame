@@ -92,6 +92,10 @@ function connectToWebSocket() {
                 alert("It's not your turn!");
             }
         });
+        stompClient.subscribe('/topic/game/war', function(message) {
+            var message = message.body;
+            displayWarMessage(message);
+        });
 
 
 

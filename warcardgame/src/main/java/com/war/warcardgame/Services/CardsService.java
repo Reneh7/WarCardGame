@@ -185,6 +185,7 @@ public class CardsService {
 
             messagingTemplate.convertAndSend("/topic/capturedCards/player2", capturedCardsResponse.getPlayer2CapturedCards());
         } else {
+            messagingTemplate.convertAndSend("/topic/game/war", "War occurred!");
             war(player1Id,player2Id,capturedCardsResponse,gameId);
         }
 
@@ -199,10 +200,21 @@ public class CardsService {
             CardsEntity additionalCard1 = drawNextCard(player1Id);
             if (additionalCard1 != null) {
                 warCards.add(additionalCard1);
+            }else {
+//                String winner = declareWinner( gameId, player1Id,  player2Id);
+//                messagingTemplate.convertAndSend("/topic/game/winner", winner);
+                declareWinnerAndAddWarCards(gameId, player1Id, player2Id, warCards, capturedCardsResponse);
+                messagingTemplate.convertAndSend("/topic/game/war", "War occurred!");
+                return;
             }
             CardsEntity additionalCard2 = drawNextCard(player2Id);
             if (additionalCard2 != null) {
                 warCards.add(additionalCard2);
+            }else {
+//                String winner = declareWinner( gameId, player1Id,  player2Id);
+//                messagingTemplate.convertAndSend("/topic/game/winner", winner);
+                declareWinnerAndAddWarCards(gameId, player1Id, player2Id, warCards, capturedCardsResponse);
+                return;
             }
         }
 
@@ -218,6 +230,7 @@ public class CardsService {
             capturedCardsResponse.setPlayer2CapturedCards(player2CapturedCards);
             messagingTemplate.convertAndSend("/topic/capturedCards/player2", capturedCardsResponse.getPlayer2CapturedCards());
         } else {
+            messagingTemplate.convertAndSend("/topic/game/war", "War occurred!");
             war(player1Id,player2Id,capturedCardsResponse,gameId);
         }
     }
@@ -245,6 +258,7 @@ public class CardsService {
         PlayersEntity player1 = optionalPlayer1.get();
         PlayersEntity player2 = optionalPlayer2.get();
 
+
         if(player1CapturedCards.size() > player2CapturedCards.size()){
             game.setWinner(player1);
             return player1.getUsername();
@@ -252,8 +266,29 @@ public class CardsService {
             game.setWinner(player2);
             return player2.getUsername();
         } else {
-            return "Tie";
+            return "It was a tie";
         }
+    }
+
+    private void declareWinnerAndAddWarCards(long gameId, long player1Id, long player2Id, List<CardsEntity> warCards, CapturedCardsResponse capturedCardsResponse) {
+        String winner = declareWinner(gameId, player1Id, player2Id);
+        Optional<PlayersEntity> optionalPlayer1= playerRepository.findById(player1Id);
+        Optional<PlayersEntity> optionalPlayer2 = playerRepository.findById(player2Id);
+        PlayersEntity player1 = optionalPlayer1.get();
+        PlayersEntity player2 = optionalPlayer2.get();
+
+        if (winner.equals(player1.getUsername())) {
+            player1CapturedCards.addAll(warCards);
+            capturedCardsResponse.setPlayer1CapturedCards(player1CapturedCards);
+            messagingTemplate.convertAndSend("/topic/capturedCards/player1", capturedCardsResponse.getPlayer1CapturedCards());
+        } else if (winner.equals(player2.getUsername())) {
+            player2CapturedCards.addAll(warCards);
+            capturedCardsResponse.setPlayer2CapturedCards(player2CapturedCards);
+            messagingTemplate.convertAndSend("/topic/capturedCards/player2", capturedCardsResponse.getPlayer2CapturedCards());
+        }
+
+        messagingTemplate.convertAndSend("/topic/game/war", "War occurred!");
+        messagingTemplate.convertAndSend("/topic/game/winner", winner);
     }
 
     public boolean allCardsPlayed(List<CardsEntity> allCards) {

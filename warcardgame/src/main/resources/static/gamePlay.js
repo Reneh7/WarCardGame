@@ -253,6 +253,13 @@ function displayWinner(winner){
      winnerContainer.textContent = "The winner is: " + winner;
 }
 
+function displayWarMessage(message){
+     const messageContainer = document.getElementById('message');
+     messageContainer.textContent =  message;
+     setTimeout(() => {
+        messageContainer.textContent = '';
+     }, 3000);
+}
 
 //===========================================================LEAVE GAME=================================================
 
