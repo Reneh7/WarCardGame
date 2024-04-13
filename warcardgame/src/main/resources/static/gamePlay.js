@@ -343,11 +343,14 @@ document.addEventListener('DOMContentLoaded', function() {
            var gameId = document.getElementById('gameID').textContent.trim();
            var player1Session = document.getElementById('player1Session').innerText;
            var player2Session = document.getElementById('player2Session').innerText;
+           var player2Username = document.getElementById('player2').innerText;
 
-           console.log("inside startGameButton");
-
-           sendPlayer1DealCardsTest(player1Session);
-           sendPlayer2DealCardsTest(player2Session);
+           if(player2Username === "Player 2"){
+                alert("Wait for player2 to join!");
+           } else {
+                sendPlayer1DealCardsTest(player1Session);
+                sendPlayer2DealCardsTest(player2Session);
+           }
        });
    }
 
