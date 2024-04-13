@@ -120,10 +120,20 @@ body {
 }
 
 #winner {
-    font-size: 30px;
+    font-size: 23px;
     color: white;
+    position: relative;
+    top: 22px;
+    text-align:center;
 }
 
+#message{
+    font-size: 25px;
+    color: white;
+    position: relative;
+    top: 22px;
+    text-align:center;
+}
 
 /*================================Flipping=================================*/
 

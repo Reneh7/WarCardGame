@@ -125,6 +125,7 @@ function displayPlayer1PlayedCardTest(card){
     const startX = playCardButton1.offsetLeft + playCardButton1.offsetWidth / 2;
     const startY = playCardButton1.offsetTop + playCardButton1.offsetHeight / 2;
 
+    player2CardSprite.setScale(0);
     player1CardSprite.setTexture(`${card.name}_${card.suit}`);
 
     let endX, endY;
@@ -257,7 +258,7 @@ function displayWarMessage(message){
      const messageContainer = document.getElementById('message');
      messageContainer.textContent =  message;
      setTimeout(() => {
-        messageContainer.textContent = '';
+            messageContainer.textContent = '';
      }, 3000);
 }
 
